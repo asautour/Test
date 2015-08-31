@@ -20,7 +20,7 @@ import android.widget.TextView;
 import amaury.todolist.db.IngredientContract;
 import amaury.todolist.db.IngredientDBHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class IngredientsActivity extends AppCompatActivity {
 
     private IngredientDBHelper helper;
     private ListAdapter listAdapter;
@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String ingredient = inputField.getText().toString();
-                        Log.d("MainActivity",ingredient);
+                        Log.d("IngredientsActivity",ingredient);
 
-                        IngredientDBHelper helper = new IngredientDBHelper(MainActivity.this);
+                        IngredientDBHelper helper = new IngredientDBHelper(IngredientsActivity.this);
                         SQLiteDatabase db = helper.getWritableDatabase();
                         ContentValues values = new ContentValues();
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        helper = new IngredientDBHelper(MainActivity.this);
+        helper = new IngredientDBHelper(IngredientsActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
         Cursor cursor = sqlDB.query(IngredientContract.TABLE,
                 new String[]{IngredientContract.Columns._ID, IngredientContract.Columns.INGREDIENT},
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 ingredient);
 
 
-        helper = new IngredientDBHelper(MainActivity.this);
+        helper = new IngredientDBHelper(IngredientsActivity.this);
         SQLiteDatabase sqlDB = helper.getWritableDatabase();
         sqlDB.execSQL(sql);
         updateUI();
