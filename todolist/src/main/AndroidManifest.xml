@@ -20,6 +20,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".RecipesInventoryActivity"
+            android:label="@string/title_activity_recipes" >
+        </activity>
+        <activity
+            android:name=".RecipeDetailActivity"
+            android:label="@string/title_activity_recipe_detail"
+            android:parentActivityName=".RecipesInventoryActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="amaury.todolist.RecipesInventoryActivity" />
+        </activity>
     </application>
 
 </manifest>

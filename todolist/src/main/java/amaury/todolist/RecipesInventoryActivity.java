@@ -5,8 +5,8 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,12 +17,12 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import amaury.todolist.db.IngredientContract;
-import amaury.todolist.db.IngredientDBHelper;
+import amaury.todolist.db.RecipeContract;
+import amaury.todolist.db.RecipeDBHelper;
 
-public class IngredientsActivity extends AppCompatActivity {
+public class RecipesInventoryActivity extends AppCompatActivity {
 
-    private IngredientDBHelper helper;
+    private RecipeDBHelper helper;
     private ListAdapter listAdapter;
 
     @Override
@@ -34,8 +34,8 @@ public class IngredientsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu_ingredients; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_ingredients, menu);
+        // Inflate the menu_recipes; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.activity_recipes, menu);
         return true;
     }
 
@@ -45,26 +45,26 @@ public class IngredientsActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_add_ingredient:
+            case R.id.action_add_recipe:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Add an ingredient");
-                builder.setMessage("What do you want to do?");
+                builder.setTitle("Add a recipe");
+                builder.setMessage("Please enter the recipe's name");
                 final EditText inputField = new EditText(this);
                 builder.setView(inputField);
                 builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String ingredient = inputField.getText().toString();
-                        Log.d("IngredientsActivity",ingredient);
+                        String recipe = inputField.getText().toString();
+                        Log.d("RecipesInventoryAct", recipe);
 
-                        IngredientDBHelper helper = new IngredientDBHelper(IngredientsActivity.this);
+                        RecipeDBHelper helper = new RecipeDBHelper(RecipesInventoryActivity.this);
                         SQLiteDatabase db = helper.getWritableDatabase();
                         ContentValues values = new ContentValues();
 
                         values.clear();
-                        values.put(IngredientContract.Columns.INGREDIENT,ingredient);
+                        values.put(RecipeContract.Columns.RECIPE,recipe);
 
-                        db.insertWithOnConflict(IngredientContract.TABLE, null, values,
+                        db.insertWithOnConflict(RecipeContract.TABLE, null, values,
                                 SQLiteDatabase.CONFLICT_IGNORE);
 
                         updateUI();
@@ -82,18 +82,18 @@ public class IngredientsActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        helper = new IngredientDBHelper(IngredientsActivity.this);
+        helper = new RecipeDBHelper(RecipesInventoryActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
-        Cursor cursor = sqlDB.query(IngredientContract.TABLE,
-                new String[]{IngredientContract.Columns._ID, IngredientContract.Columns.INGREDIENT},
+        Cursor cursor = sqlDB.query(RecipeContract.TABLE,
+                new String[]{RecipeContract.Columns._ID, RecipeContract.Columns.RECIPE},
                 null,null,null,null,null);
 
         listAdapter = new SimpleCursorAdapter(
                 this,
-                R.layout.view_ingredient,
+                R.layout.view_recipes,
                 cursor,
-                new String[] { IngredientContract.Columns.INGREDIENT},
-                new int[] { R.id.ingredientTextView},
+                new String[] { RecipeContract.Columns.RECIPE},
+                new int[] { R.id.recipeTextView},
                 0
         );
 
@@ -106,16 +106,16 @@ public class IngredientsActivity extends AppCompatActivity {
 
     public void onDoneButtonClick(View view) {
         View v = (View) view.getParent();
-        TextView ingredientTextView = (TextView) v.findViewById(R.id.ingredientTextView);
-        String ingredient = ingredientTextView.getText().toString();
+        TextView recipeTextView = (TextView) v.findViewById(R.id.recipeTextView);
+        String recipe = recipeTextView.getText().toString();
 
         String sql = String.format("DELETE FROM %s WHERE %s = '%s'",
-                IngredientContract.TABLE,
-                IngredientContract.Columns.INGREDIENT,
-                ingredient);
+                RecipeContract.TABLE,
+                RecipeContract.Columns.RECIPE,
+                recipe);
 
 
-        helper = new IngredientDBHelper(IngredientsActivity.this);
+        helper = new RecipeDBHelper(RecipesInventoryActivity.this);
         SQLiteDatabase sqlDB = helper.getWritableDatabase();
         sqlDB.execSQL(sql);
         updateUI();
