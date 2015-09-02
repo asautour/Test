@@ -14,9 +14,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ResourceCursorAdapter;
+import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import amaury.todolist.db.IngredientContract;
+import amaury.todolist.db.IngredientDBHelper;
 import amaury.todolist.db.RecipeContract;
 import amaury.todolist.db.RecipeDBHelper;
 
@@ -28,7 +32,7 @@ public class RecipesInventoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.view_list);
         updateUI();
     }
 
@@ -92,27 +96,28 @@ public class RecipesInventoryActivity extends AppCompatActivity {
                 this,
                 R.layout.view_recipes,
                 cursor,
-                new String[] { RecipeContract.Columns.RECIPE},
-                new int[] { R.id.recipeTextView},
+                new String[]{RecipeContract.Columns.RECIPE},
+                new int[]{R.id.recipeTextView},
                 0
-        );
+        ) {
+        };
 
         //this.setListAdapter(listAdapter);
         // Display the list view
-        ListView listView = (ListView) findViewById(R.id.list);
+        ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(listAdapter);
 
     }
 
     public void onDoneButtonClick(View view) {
         View v = (View) view.getParent();
-        TextView recipeTextView = (TextView) v.findViewById(R.id.recipeTextView);
-        String recipe = recipeTextView.getText().toString();
+        TextView textView = (TextView) v.findViewById(R.id.recipeTextView);
+        String dbEntry = textView.getText().toString();
 
         String sql = String.format("DELETE FROM %s WHERE %s = '%s'",
                 RecipeContract.TABLE,
                 RecipeContract.Columns.RECIPE,
-                recipe);
+                dbEntry);
 
 
         helper = new RecipeDBHelper(RecipesInventoryActivity.this);

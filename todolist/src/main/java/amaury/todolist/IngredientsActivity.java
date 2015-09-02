@@ -28,7 +28,7 @@ public class IngredientsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.view_list);
         updateUI();
     }
 
@@ -99,7 +99,7 @@ public class IngredientsActivity extends AppCompatActivity {
 
         //this.setListAdapter(listAdapter);
         // Display the list view
-        ListView listView = (ListView) findViewById(R.id.list);
+        ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(listAdapter);
 
     }
