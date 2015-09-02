@@ -3,6 +3,7 @@ package amaury.todolist;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -107,6 +109,18 @@ public class RecipesInventoryActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(listAdapter);
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+                // TODO Auto-generated method stub
+
+                Log.v("long clicked", "pos: " + pos);
+
+                return true;
+            }
+        });
+
     }
 
     public void onDoneButtonClick(View view) {
@@ -124,5 +138,9 @@ public class RecipesInventoryActivity extends AppCompatActivity {
         SQLiteDatabase sqlDB = helper.getWritableDatabase();
         sqlDB.execSQL(sql);
         updateUI();
+    }
+
+    public void onRecipeClick(View view) {
+        startActivity(new Intent(RecipesInventoryActivity.this, RecipeDetailActivity.class));
     }
 }

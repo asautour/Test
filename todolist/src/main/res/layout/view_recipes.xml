@@ -13,9 +13,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textSize="20dp"
+        android:longClickable="true"
+        android:clickable="true"
         android:layout_toLeftOf="@+id/doneButton"
         android:layout_alignBottom="@+id/doneButton"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        android:onClick="onRecipeClick" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
