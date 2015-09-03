@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import amaury.todolist.db.IngredientContract;
+import amaury.todolist.db.IngredientTable;
 import amaury.todolist.db.IngredientDBHelper;
 
 public class IngredientsActivity extends AppCompatActivity {
@@ -62,9 +62,9 @@ public class IngredientsActivity extends AppCompatActivity {
                         ContentValues values = new ContentValues();
 
                         values.clear();
-                        values.put(IngredientContract.Columns.INGREDIENT,ingredient);
+                        values.put(IngredientTable.Columns.INGREDIENT,ingredient);
 
-                        db.insertWithOnConflict(IngredientContract.TABLE, null, values,
+                        db.insertWithOnConflict(IngredientTable.TABLE, null, values,
                                 SQLiteDatabase.CONFLICT_IGNORE);
 
                         updateUI();
@@ -84,15 +84,15 @@ public class IngredientsActivity extends AppCompatActivity {
     private void updateUI() {
         helper = new IngredientDBHelper(IngredientsActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
-        Cursor cursor = sqlDB.query(IngredientContract.TABLE,
-                new String[]{IngredientContract.Columns._ID, IngredientContract.Columns.INGREDIENT},
+        Cursor cursor = sqlDB.query(IngredientTable.TABLE,
+                new String[]{IngredientTable.Columns._ID, IngredientTable.Columns.INGREDIENT},
                 null,null,null,null,null);
 
         listAdapter = new SimpleCursorAdapter(
                 this,
                 R.layout.view_ingredient,
                 cursor,
-                new String[] { IngredientContract.Columns.INGREDIENT},
+                new String[] { IngredientTable.Columns.INGREDIENT},
                 new int[] { R.id.ingredientTextView},
                 0
         );
@@ -110,8 +110,8 @@ public class IngredientsActivity extends AppCompatActivity {
         String ingredient = ingredientTextView.getText().toString();
 
         String sql = String.format("DELETE FROM %s WHERE %s = '%s'",
-                IngredientContract.TABLE,
-                IngredientContract.Columns.INGREDIENT,
+                IngredientTable.TABLE,
+                IngredientTable.Columns.INGREDIENT,
                 ingredient);
 
 

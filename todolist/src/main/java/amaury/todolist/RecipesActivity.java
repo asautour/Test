@@ -16,17 +16,13 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ResourceCursorAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import amaury.todolist.db.IngredientContract;
-import amaury.todolist.db.IngredientDBHelper;
-import amaury.todolist.db.RecipeContract;
+import amaury.todolist.db.RecipeTable;
 import amaury.todolist.db.RecipeDBHelper;
 
-public class RecipesInventoryActivity extends AppCompatActivity {
+public class RecipesActivity extends AppCompatActivity {
 
     private RecipeDBHelper helper;
     private ListAdapter listAdapter;
@@ -63,14 +59,14 @@ public class RecipesInventoryActivity extends AppCompatActivity {
                         String recipe = inputField.getText().toString();
                         Log.d("RecipesInventoryAct", recipe);
 
-                        RecipeDBHelper helper = new RecipeDBHelper(RecipesInventoryActivity.this);
+                        RecipeDBHelper helper = new RecipeDBHelper(RecipesActivity.this);
                         SQLiteDatabase db = helper.getWritableDatabase();
                         ContentValues values = new ContentValues();
 
                         values.clear();
-                        values.put(RecipeContract.Columns.RECIPE,recipe);
+                        values.put(RecipeTable.Columns.RECIPE,recipe);
 
-                        db.insertWithOnConflict(RecipeContract.TABLE, null, values,
+                        db.insertWithOnConflict(RecipeTable.TABLE, null, values,
                                 SQLiteDatabase.CONFLICT_IGNORE);
 
                         updateUI();
@@ -88,17 +84,17 @@ public class RecipesInventoryActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        helper = new RecipeDBHelper(RecipesInventoryActivity.this);
+        helper = new RecipeDBHelper(RecipesActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
-        Cursor cursor = sqlDB.query(RecipeContract.TABLE,
-                new String[]{RecipeContract.Columns._ID, RecipeContract.Columns.RECIPE},
+        Cursor cursor = sqlDB.query(RecipeTable.TABLE,
+                new String[]{RecipeTable.Columns._ID, RecipeTable.Columns.RECIPE},
                 null,null,null,null,null);
 
         listAdapter = new SimpleCursorAdapter(
                 this,
                 R.layout.view_recipes,
                 cursor,
-                new String[]{RecipeContract.Columns.RECIPE},
+                new String[]{RecipeTable.Columns.RECIPE},
                 new int[]{R.id.recipeTextView},
                 0
         ) {
@@ -129,18 +125,18 @@ public class RecipesInventoryActivity extends AppCompatActivity {
         String dbEntry = textView.getText().toString();
 
         String sql = String.format("DELETE FROM %s WHERE %s = '%s'",
-                RecipeContract.TABLE,
-                RecipeContract.Columns.RECIPE,
+                RecipeTable.TABLE,
+                RecipeTable.Columns.RECIPE,
                 dbEntry);
 
 
-        helper = new RecipeDBHelper(RecipesInventoryActivity.this);
+        helper = new RecipeDBHelper(RecipesActivity.this);
         SQLiteDatabase sqlDB = helper.getWritableDatabase();
         sqlDB.execSQL(sql);
         updateUI();
     }
 
     public void onRecipeClick(View view) {
-        startActivity(new Intent(RecipesInventoryActivity.this, RecipeDetailActivity.class));
+        startActivity(new Intent(RecipesActivity.this, RecipeDetailActivity.class));
     }
 }

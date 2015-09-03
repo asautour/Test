@@ -8,7 +8,7 @@ import android.util.Log;
 public class IngredientDBHelper extends SQLiteOpenHelper {
 
     public IngredientDBHelper(Context context) {
-        super(context, IngredientContract.DB_NAME, null, IngredientContract.DB_VERSION);
+        super(context, IngredientTable.DB_NAME, null, IngredientTable.DB_VERSION);
     }
 
     @Override
@@ -16,8 +16,8 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
         String sqlQuery =
                 String.format("CREATE TABLE %s (" +
                                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                "%s TEXT)", IngredientContract.TABLE,
-                        IngredientContract.Columns.INGREDIENT);
+                                "%s TEXT)", IngredientTable.TABLE,
+                        IngredientTable.Columns.INGREDIENT);
 
         Log.d("IngredientDBHelper","Query to form table: "+sqlQuery);
         sqlDB.execSQL(sqlQuery);
@@ -25,7 +25,7 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqlDB, int i, int i2) {
-        sqlDB.execSQL("DROP TABLE IF EXISTS "+ IngredientContract.TABLE);
+        sqlDB.execSQL("DROP TABLE IF EXISTS "+ IngredientTable.TABLE);
         onCreate(sqlDB);
     }
 }

@@ -21,16 +21,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RecipesInventoryActivity"
+            android:name=".RecipesActivity"
             android:label="@string/title_activity_recipes" >
         </activity>
         <activity
             android:name=".RecipeDetailActivity"
             android:label="@string/title_activity_recipe_detail"
-            android:parentActivityName=".RecipesInventoryActivity" >
+            android:parentActivityName=".RecipesActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="amaury.todolist.RecipesInventoryActivity" />
+                android:value=".RecipesActivity" />
         </activity>
     </application>
 
