@@ -15,17 +15,17 @@
         android:textSize="20dp"
         android:longClickable="true"
         android:clickable="true"
-        android:layout_toLeftOf="@+id/doneButton"
-        android:layout_alignBottom="@+id/doneButton"
+        android:layout_toLeftOf="@+id/removeRecipeButton"
+        android:layout_alignBottom="@+id/removeRecipeButton"
         android:gravity="center_vertical"
         android:onClick="onRecipeClick" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Remove"
-        android:id="@+id/doneButton"
+        android:id="@+id/removeRecipeButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="onDoneButtonClick" />
+        android:onClick="onRemoveRecipeClick" />
 </RelativeLayout>

@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import amaury.todolist.db.IngredientTable;
 import amaury.todolist.db.IngredientDBHelper;
 
 public class IngredientsActivity extends AppCompatActivity {
@@ -46,54 +45,61 @@ public class IngredientsActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_add_ingredient:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Add an ingredient");
-                builder.setMessage("What do you want to do?");
-                final EditText inputField = new EditText(this);
-                builder.setView(inputField);
-                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String ingredient = inputField.getText().toString();
-                        Log.d("IngredientsActivity",ingredient);
-
-                        IngredientDBHelper helper = new IngredientDBHelper(IngredientsActivity.this);
-                        SQLiteDatabase db = helper.getWritableDatabase();
-                        ContentValues values = new ContentValues();
-
-                        values.clear();
-                        values.put(IngredientTable.Columns.INGREDIENT,ingredient);
-
-                        db.insertWithOnConflict(IngredientTable.TABLE, null, values,
-                                SQLiteDatabase.CONFLICT_IGNORE);
-
-                        updateUI();
-                    }
-                });
-
-                builder.setNegativeButton("Cancel",null);
-
-                builder.create().show();
+                showPopupAdd();
                 return true;
-
             default:
                 return false;
         }
     }
 
+    private void showPopupAdd() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add an ingredient");
+        //builder.setMessage("What do you want to do?");
+        final EditText inputField = new EditText(this);
+        builder.setView(inputField);
+
+        // when click on "Add", add ingredient to the INGREDIENT table
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                addIngredientToDb(inputField);
+                updateUI();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", null);
+        builder.create().show();
+    }
+
+    private void addIngredientToDb(EditText inputField) {
+        String ingredientName = inputField.getText().toString();
+        Log.d("IngredientsActivity", ingredientName);
+
+        IngredientDBHelper helper = new IngredientDBHelper(IngredientsActivity.this);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.clear();
+        values.put(IngredientDBHelper.KEY_NAME, ingredientName);
+
+        db.insertWithOnConflict(IngredientDBHelper.TABLE_INGREDIENTS, null, values,
+                SQLiteDatabase.CONFLICT_IGNORE);
+    }
+
     private void updateUI() {
         helper = new IngredientDBHelper(IngredientsActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
-        Cursor cursor = sqlDB.query(IngredientTable.TABLE,
-                new String[]{IngredientTable.Columns._ID, IngredientTable.Columns.INGREDIENT},
-                null,null,null,null,null);
+        Cursor cursor = sqlDB.query(IngredientDBHelper.TABLE_INGREDIENTS,
+                new String[]{IngredientDBHelper.KEY_ID, IngredientDBHelper.KEY_NAME},
+                null, null, null, null, null);
 
         listAdapter = new SimpleCursorAdapter(
                 this,
                 R.layout.view_ingredient,
                 cursor,
-                new String[] { IngredientTable.Columns.INGREDIENT},
-                new int[] { R.id.ingredientTextView},
+                new String[] { IngredientDBHelper.KEY_NAME},
+                new int[] { R.id.ingredientNameView},
                 0
         );
 
@@ -104,20 +110,10 @@ public class IngredientsActivity extends AppCompatActivity {
 
     }
 
-    public void onDoneButtonClick(View view) {
+    public void onRemoveIngredientClick(View view) {
         View v = (View) view.getParent();
-        TextView ingredientTextView = (TextView) v.findViewById(R.id.ingredientTextView);
-        String ingredient = ingredientTextView.getText().toString();
-
-        String sql = String.format("DELETE FROM %s WHERE %s = '%s'",
-                IngredientTable.TABLE,
-                IngredientTable.Columns.INGREDIENT,
-                ingredient);
-
-
-        helper = new IngredientDBHelper(IngredientsActivity.this);
-        SQLiteDatabase sqlDB = helper.getWritableDatabase();
-        sqlDB.execSQL(sql);
+        TextView ingredientTextView = (TextView) v.findViewById(R.id.ingredientNameView);
+        helper.deleteIngredient(ingredientTextView.getText().toString());
         updateUI();
     }
 }

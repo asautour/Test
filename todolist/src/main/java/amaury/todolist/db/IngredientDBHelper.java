@@ -1,31 +1,122 @@
 package amaury.todolist.db;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import amaury.todolist.data.Ingredient;
+
 public class IngredientDBHelper extends SQLiteOpenHelper {
+    public static final int DATABASE_VERSION = 2;
+    public static final String DATABASE_NAME = "recipeManager";
+    public static final String TABLE_INGREDIENTS = "ingredients";
+
+    public static final String KEY_ID = BaseColumns._ID;
+    public static final String KEY_NAME = "ingredient";
 
     public IngredientDBHelper(Context context) {
-        super(context, IngredientTable.DB_NAME, null, IngredientTable.DB_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqlDB) {
-        String sqlQuery =
-                String.format("CREATE TABLE %s (" +
-                                "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                "%s TEXT)", IngredientTable.TABLE,
-                        IngredientTable.Columns.INGREDIENT);
+        String sqlQuery = String.format(
+                "CREATE TABLE %s (" +
+                        "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "%s TEXT)",
+                TABLE_INGREDIENTS,
+                KEY_NAME);
 
-        Log.d("IngredientDBHelper","Query to form table: "+sqlQuery);
+        Log.d("IngredientDBHelper", "Query to form table: " + sqlQuery);
         sqlDB.execSQL(sqlQuery);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqlDB, int i, int i2) {
-        sqlDB.execSQL("DROP TABLE IF EXISTS "+ IngredientTable.TABLE);
+    public void onUpgrade(SQLiteDatabase sqlDB, int oldVersion, int newVersion) {
+        sqlDB.execSQL("DROP TABLE IF EXISTS " + TABLE_INGREDIENTS);
         onCreate(sqlDB);
+    }
+
+    void addIngredient(Ingredient ingredient) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, ingredient.getName()); // Contact Name
+
+        // Inserting Row
+        db.insert(TABLE_INGREDIENTS, null, values);
+        db.close(); // Closing database connection
+    }
+
+    public Ingredient getIngredient(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                TABLE_INGREDIENTS,
+                new String[] { KEY_ID, KEY_NAME },
+                KEY_ID + "=?",
+                new String[] { String.valueOf(id) },
+                null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            return new Ingredient(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
+        }
+        else
+            return null;
+    }
+
+    public List<Ingredient> getAllIngredients() {
+        List<Ingredient> ingredientList = new ArrayList<Ingredient>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_INGREDIENTS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                Ingredient ingredient = new Ingredient();
+                ingredient.setId(Integer.parseInt(cursor.getString(0)));
+                ingredient.setName(cursor.getString(1));
+                // Adding ingredient to list
+                ingredientList.add(ingredient);
+            } while (cursor.moveToNext());
+        }
+
+        // return ingredients list
+        return ingredientList;
+    }
+
+    public int updateIngredient(Ingredient ingredient) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, ingredient.getName());
+
+        // updating row
+        return db.update(TABLE_INGREDIENTS, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(ingredient.getId()) });
+    }
+
+    public void deleteIngredient(Ingredient ingredient) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_INGREDIENTS, KEY_ID + " = ?",
+                new String[]{String.valueOf(ingredient.getId())});
+        db.close();
+    }
+
+    public void deleteIngredient(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_INGREDIENTS, KEY_NAME + " = ?",
+                new String[] { name });
+        db.close();
     }
 }
