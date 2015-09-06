@@ -15,9 +15,8 @@ import amaury.todolist.db.RecipeDetailDBHelper;
 
 public class RecipeDetailActivity extends AppCompatActivity {
     private RecipeDetail recipe;
-    private RecipeDetailDBHelper helper;
+    private RecipeDetailDBHelper helper = new RecipeDetailDBHelper(RecipeDetailActivity.this);;
     private ListAdapter listAdapter;
-
 
     public RecipeDetailActivity() {
     }
@@ -26,6 +25,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_recipe_detail);
+
 
         recipe = new RecipeDetail(getIntent());
         updateUI();
@@ -54,7 +54,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        helper = new RecipeDetailDBHelper(RecipeDetailActivity.this);
+        //helper = new RecipeDetailDBHelper(RecipeDetailActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
         Cursor cursor = sqlDB.query(RecipeDetailDBHelper.TABLE_RECIPE_DETAILS,
                 new String[]{RecipeDetailDBHelper.KEY_ID, RecipeDetailDBHelper.KEY_INGREDIENT_ID},

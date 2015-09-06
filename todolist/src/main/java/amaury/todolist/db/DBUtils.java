@@ -5,7 +5,8 @@ package amaury.todolist.db;
  */
 public class DBUtils {
 
-    public static final int DATABASE_VERSION = 3    ;
+    public static final String DATABASE_NAME = "recipeManager";
+    public static final int DATABASE_VERSION = 3;
 
     /* returns an ingredient name from the INGREDIENT table using its unique ID */
     public void getIngredientName(IngredientDBHelper ingredientsDBHelper, int ingredientId) {

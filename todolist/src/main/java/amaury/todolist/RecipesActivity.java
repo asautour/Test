@@ -26,7 +26,7 @@ import amaury.todolist.db.RecipeDBHelper;
 
 public class RecipesActivity extends AppCompatActivity {
 
-    private RecipeDBHelper helper;
+    private static RecipeDBHelper helper;
     private ListAdapter listAdapter;
 
     @Override
@@ -81,7 +81,7 @@ public class RecipesActivity extends AppCompatActivity {
         String recipeName = inputField.getText().toString();
         Log.d("RecipesActivity", recipeName);
 
-        RecipeDBHelper helper = new RecipeDBHelper(RecipesActivity.this);
+        RecipeDBHelper helper = RecipeDBHelper.getInstance(RecipesActivity.this);
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -93,8 +93,9 @@ public class RecipesActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        helper = new RecipeDBHelper(RecipesActivity.this);
+        helper = RecipeDBHelper.getInstance(RecipesActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
+        //helper.onUpgrade(sqlDB,1,3);
         Cursor cursor = sqlDB.query(RecipeDBHelper.TABLE_RECIPE_NAMES,
                 new String[]{RecipeDBHelper.KEY_ID, RecipeDBHelper.KEY_NAME},
                 null,null,null,null,null);
@@ -137,12 +138,11 @@ public class RecipesActivity extends AppCompatActivity {
     public void onRecipeClick(View view) {
         View v = (View) view.getParent();
         TextView textView = (TextView) v.findViewById(R.id.recipeTextView);
-        String dbEntry = textView.getText().toString();
+
+        Bundle bundle = new Bundle();
+        bundle.putString(RecipeDetail.RECIPE_EXTRA_NAME, textView.getText().toString());
 
         Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString(RecipeDetail.RECIPE_EXTRA_NAME, dbEntry);
-        bundle.putStringArrayList(RecipeDetail.RECIPE_EXTRA_INGREDIENTS, new ArrayList<String>());
         intent.putExtras(bundle);
         startActivity(intent);
     }

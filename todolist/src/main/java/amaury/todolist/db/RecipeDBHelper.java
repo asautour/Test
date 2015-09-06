@@ -14,23 +14,31 @@ import android.content.ContentValues;
  import amaury.todolist.data.Recipe;
 
 public class RecipeDBHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "recipeManager";
-    public static final String TABLE_RECIPE_NAMES = "recipe_names";
+    public static final String TABLE_RECIPE_NAMES   = "recipe_names";
+    public static final String KEY_ID               = BaseColumns._ID;
+    public static final String KEY_NAME             = "recipe";
 
-    public static final String KEY_ID = BaseColumns._ID;
-    public static final String KEY_NAME = "recipe";
+    private static RecipeDBHelper sInstance;
+
+    public static synchronized RecipeDBHelper getInstance(Context context) {
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null)
+            sInstance = new RecipeDBHelper(context.getApplicationContext());
+        return sInstance;
+    }
 
     public RecipeDBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DBUtils.DATABASE_NAME, null, DBUtils.DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqlDB) {
         String sqlQuery = String.format(
                 "CREATE TABLE %s (" +
-                        "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "%s TEXT)",
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "%s TEXT)",
                 TABLE_RECIPE_NAMES,
                 KEY_NAME);
 
@@ -46,13 +54,20 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
 
     void addRecipe(Recipe recipe) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
 
-        ContentValues values = new ContentValues();
-        values.put(KEY_NAME, recipe.getName());
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME, recipe.getName());
 
-        // Inserting Row
-        db.insert(TABLE_RECIPE_NAMES, null, values);
-        db.close(); // Closing database connection
+            // Inserting Row
+            db.insert(TABLE_RECIPE_NAMES, null, values);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_RECIPE_NAMES, "Error while trying to add post to database");
+        } finally {
+            db.endTransaction();
+        }
     }
 
     public Recipe getRecipe(int id) {
@@ -72,7 +87,24 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
             return null;
     }
 
-    public List<Recipe> getAllIngredients() {
+    public Recipe getRecipe(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                TABLE_RECIPE_NAMES,
+                new String[] { KEY_ID, KEY_NAME },
+                KEY_NAME + "=?",
+                new String[] { String.valueOf(name) },
+                null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            return new Recipe(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
+        }
+        else
+            return null;
+    }
+
+    public List<Recipe> getAllRecipes() {
         List<Recipe> recipeList = new ArrayList<Recipe>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_RECIPE_NAMES;
@@ -108,15 +140,30 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
 
     public void deleteRecipe(Recipe recipe) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_RECIPE_NAMES, KEY_ID + " = ?",
-                new String[]{String.valueOf(recipe.getId())});
-        db.close();
+
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_RECIPE_NAMES, KEY_ID + " = ?",
+                    new String[]{String.valueOf(recipe.getId())});
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_RECIPE_NAMES, "Error while trying to delete a recipe");
+        } finally {
+            db.endTransaction();
+        }
     }
 
     public void deleteRecipe(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_RECIPE_NAMES, KEY_NAME + " = ?",
-                new String[] { name });
-        db.close();
+
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_RECIPE_NAMES, KEY_NAME + " = ?",  new String[]{name});
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_RECIPE_NAMES, "Error while trying to delete a recipe: " + name);
+        } finally {
+            db.endTransaction();
+        }
     }
 }

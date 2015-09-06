@@ -14,23 +14,31 @@ import java.util.List;
 import amaury.todolist.data.Ingredient;
 
 public class IngredientDBHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "recipeManager";
-    public static final String TABLE_INGREDIENTS = "ingredients";
+    public static final String TABLE_INGREDIENTS    = "ingredients";
+    public static final String KEY_ID               = BaseColumns._ID;
+    public static final String KEY_NAME             = "ingredient";
 
-    public static final String KEY_ID = BaseColumns._ID;
-    public static final String KEY_NAME = "ingredient";
+    private static IngredientDBHelper sInstance;
+
+    public static synchronized IngredientDBHelper getInstance(Context context) {
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null)
+            sInstance = new IngredientDBHelper(context.getApplicationContext());
+        return sInstance;
+    }
 
     public IngredientDBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DBUtils.DATABASE_NAME, null, DBUtils.DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqlDB) {
         String sqlQuery = String.format(
                 "CREATE TABLE %s (" +
-                        "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "%s TEXT)",
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "%s TEXT)",
                 TABLE_INGREDIENTS,
                 KEY_NAME);
 
@@ -47,12 +55,19 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
     void addIngredient(Ingredient ingredient) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(KEY_NAME, ingredient.getName()); // Contact Name
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME, ingredient.getName()); // Contact Name
 
-        // Inserting Row
-        db.insert(TABLE_INGREDIENTS, null, values);
-        db.close(); // Closing database connection
+            // Inserting Row
+            db.insert(TABLE_INGREDIENTS, null, values);
+            db.close(); // Closing database connection
+        } catch (Exception e) {
+            Log.d(TABLE_INGREDIENTS, "Error while trying to add post to database");
+        } finally {
+            db.endTransaction();
+        }
     }
 
     public Ingredient getIngredient(int id) {
@@ -108,15 +123,30 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
 
     public void deleteIngredient(Ingredient ingredient) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_INGREDIENTS, KEY_ID + " = ?",
-                new String[]{String.valueOf(ingredient.getId())});
-        db.close();
+
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_INGREDIENTS, KEY_ID + " = ?",
+                    new String[]{String.valueOf(ingredient.getId())});
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_INGREDIENTS, "Error while trying to delete an ingredient");
+        } finally {
+            db.endTransaction();
+        }
     }
 
     public void deleteIngredient(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_INGREDIENTS, KEY_NAME + " = ?",
-                new String[] { name });
-        db.close();
+
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_INGREDIENTS, KEY_NAME + " = ?",  new String[] { name });
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_INGREDIENTS, "Error while trying to delete an ingredient: " + name);
+        } finally {
+            db.endTransaction();
+        }
     }
 }

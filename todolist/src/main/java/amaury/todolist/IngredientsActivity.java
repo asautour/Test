@@ -76,7 +76,7 @@ public class IngredientsActivity extends AppCompatActivity {
         String ingredientName = inputField.getText().toString();
         Log.d("IngredientsActivity", ingredientName);
 
-        IngredientDBHelper helper = new IngredientDBHelper(IngredientsActivity.this);
+        IngredientDBHelper helper = IngredientDBHelper.getInstance(IngredientsActivity.this);
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -88,8 +88,9 @@ public class IngredientsActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        helper = new IngredientDBHelper(IngredientsActivity.this);
+        helper = IngredientDBHelper.getInstance(IngredientsActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
+        //helper.onUpgrade(sqlDB,1,3);
         Cursor cursor = sqlDB.query(IngredientDBHelper.TABLE_INGREDIENTS,
                 new String[]{IngredientDBHelper.KEY_ID, IngredientDBHelper.KEY_NAME},
                 null, null, null, null, null);
