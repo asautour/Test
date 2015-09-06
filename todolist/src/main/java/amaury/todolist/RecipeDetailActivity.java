@@ -72,6 +72,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
     private void showPopupAdd() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select an ingredient to add");
@@ -92,6 +95,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
     private void updateUI() {
         listDetails = helperDetail.getRecipeDetails(recipeId);
 
@@ -109,25 +115,25 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Cursor cursor = sqlDB.query(RecipeDetailDBHelper.TABLE_RECIPE_DETAILS,
                 tableColumns, whereClause, whereArgs, null,null,null);
 
-        /*listAdapter = new SimpleCursorAdapter(
+        ListAdapter listAdapter2 = new SimpleCursorAdapter(
                 this,
                 R.layout.view_recipe_detail,
                 cursor,
                 // map the following columns in the recipe_details table to...
                 new String[] {
                         RecipeDetailDBHelper.KEY_INGREDIENT_ID,
-                        RecipeDetailDBHelper.KEY_QUANTITY + RecipeDetailDBHelper.KEY_UNIT
+                        RecipeDetailDBHelper.KEY_QUANTITY // + RecipeDetailDBHelper.KEY_UNIT
                 },
                 // the following view fields in view_recipe_detail.xml
                 new int[] { R.id.textRecipeIngredient, R.id.textIngredientQty },
-                0){};*/
+                0){};
 
-        listAdapter = new RecipeDetailArrayAdapter(
+        /*listAdapter = new RecipeDetailArrayAdapter(
                 this,
-                listDetails);
+                listDetails);*/
 
         // Display the list view
         ListView listView = (ListView) findViewById(R.id.listview);
-        listView.setAdapter(listAdapter);
+        listView.setAdapter(listAdapter2);
     }
 }

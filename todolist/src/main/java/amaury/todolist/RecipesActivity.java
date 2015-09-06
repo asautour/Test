@@ -23,6 +23,9 @@ import amaury.todolist.data.Recipe;
 import amaury.todolist.db.RecipeDBHelper;
 import amaury.todolist.db.RecipeDetailDBHelper;
 
+/* *************************************************************************************************
+
+************************************************************************************************* */
 public class RecipesActivity extends AppCompatActivity {
 
     private static RecipeDBHelper helper;
@@ -32,6 +35,7 @@ public class RecipesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_list);
+        helper = RecipeDBHelper.getInstance(RecipesActivity.this);
         updateUI();
     }
 
@@ -57,6 +61,9 @@ public class RecipesActivity extends AppCompatActivity {
         }
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
     private void showPopupAdd() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add a recipe");
@@ -67,8 +74,8 @@ public class RecipesActivity extends AppCompatActivity {
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                addRecipeToDb(inputField);
-                updateUI();
+            helper.addRecipeToDb(inputField.getText().toString());
+            updateUI();
             }
         });
 
@@ -76,23 +83,10 @@ public class RecipesActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-    private void addRecipeToDb(EditText inputField) {
-        String recipeName = inputField.getText().toString();
-        Log.d("RecipesActivity", recipeName);
+    /* ---------------------------------------------------------------------------------------------
 
-        RecipeDBHelper helper = RecipeDBHelper.getInstance(RecipesActivity.this);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.clear();
-        values.put(RecipeDBHelper.KEY_NAME, recipeName);
-
-        db.insertWithOnConflict(RecipeDBHelper.TABLE_RECIPE_NAMES, null, values,
-                SQLiteDatabase.CONFLICT_IGNORE);
-    }
-
+    --------------------------------------------------------------------------------------------- */
     private void updateUI() {
-        helper = RecipeDBHelper.getInstance(RecipesActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
         //helper.onUpgrade(sqlDB,1,3);
         Cursor cursor = sqlDB.query(RecipeDBHelper.TABLE_RECIPE_NAMES,
@@ -108,23 +102,24 @@ public class RecipesActivity extends AppCompatActivity {
                 0
         );
 
-        //this.setListAdapter(listAdapter);
         // Display the list view
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(listAdapter);
 
+        // TODO update code on recipe long click action
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
-            // TODO update code on recipe long click action
             Log.v("long clicked", "pos: " + pos);
             return true;
             }
         });
-
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
     public void onRemoveRecipeClick(View view) {
         View v = (View) view.getParent();
         TextView textView = (TextView) v.findViewById(R.id.recipeTextView);
@@ -132,8 +127,11 @@ public class RecipesActivity extends AppCompatActivity {
         updateUI();
     }
 
+    /* ---------------------------------------------------------------------------------------------
+        On recipe click, the details screen is open with the list of ingredients, associated
+        quantities and the relevant units.
+    --------------------------------------------------------------------------------------------- */
     public void onRecipeClick(View view) {
-        helper = RecipeDBHelper.getInstance(RecipesActivity.this);
         View v = (View) view.getParent();
         TextView textView = (TextView) v.findViewById(R.id.recipeTextView);
 

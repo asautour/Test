@@ -34,10 +34,20 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
         TextView textIngredientName = (TextView) rowView.findViewById(R.id.textRecipeIngredient);
         TextView textQty = (TextView) rowView.findViewById(R.id.textIngredientQty);
 
-        RecipeDetail detail = listDetails.get(position);
+        RecipeDetail detail = getItem(position);
         textIngredientName.setText(detail.getId());
         textQty.setText(detail.getQuantity() + detail.getUnit());
 
         return rowView;
+    }
+
+    @Override
+    public int getCount() {
+        return listDetails.size();
+    }
+
+    @Override
+    public RecipeDetail getItem(int position) {
+        return listDetails.get(position);
     }
 }
