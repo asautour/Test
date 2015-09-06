@@ -12,6 +12,7 @@ import android.content.ContentValues;
  import java.util.List;
 
  import amaury.todolist.data.Recipe;
+import amaury.todolist.data.RecipeDetail;
 
 public class RecipeDBHelper extends SQLiteOpenHelper {
     public static final String TABLE_RECIPE_NAMES   = "recipe_names";
@@ -105,7 +106,7 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
     }
 
     public List<Recipe> getAllRecipes() {
-        List<Recipe> recipeList = new ArrayList<Recipe>();
+        List<Recipe> recipeList = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_RECIPE_NAMES;
 

@@ -1,7 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="amaury.todolist.RecipeDetailActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    xmlns:tools="schemas.android.com/tools"
+    tools:context="amaury.todolist.RecipesDetailActivity"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
+
+    <item android:id="@+id/action_add_ingredient_to_recipe"
+        yourapp:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Add an ingredient to your recipe" />
 </menu>

@@ -19,10 +19,9 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import amaury.todolist.data.RecipeDetail;
+import amaury.todolist.data.Recipe;
 import amaury.todolist.db.RecipeDBHelper;
+import amaury.todolist.db.RecipeDetailDBHelper;
 
 public class RecipesActivity extends AppCompatActivity {
 
@@ -118,11 +117,9 @@ public class RecipesActivity extends AppCompatActivity {
 
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
-                // TODO Auto-generated method stub
-
-                Log.v("long clicked", "pos: " + pos);
-
-                return true;
+            // TODO update code on recipe long click action
+            Log.v("long clicked", "pos: " + pos);
+            return true;
             }
         });
 
@@ -136,14 +133,14 @@ public class RecipesActivity extends AppCompatActivity {
     }
 
     public void onRecipeClick(View view) {
+        helper = RecipeDBHelper.getInstance(RecipesActivity.this);
         View v = (View) view.getParent();
         TextView textView = (TextView) v.findViewById(R.id.recipeTextView);
 
-        Bundle bundle = new Bundle();
-        bundle.putString(RecipeDetail.RECIPE_EXTRA_NAME, textView.getText().toString());
-
+        // Parameter to build the detailed view is the recipe's ID.
+        Recipe recipe = helper.getRecipe(textView.getText().toString());
         Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
-        intent.putExtras(bundle);
+        intent.putExtra(RecipeDetailDBHelper.KEY_RECIPE_ID, recipe.getId());
         startActivity(intent);
     }
 }

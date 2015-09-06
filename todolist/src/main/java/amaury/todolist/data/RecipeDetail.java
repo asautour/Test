@@ -1,35 +1,31 @@
 package amaury.todolist.data;
 
 import android.content.Intent;
+import android.text.TextUtils;
 
 import java.util.Map;
 
-public class RecipeDetail {
-    public static final String RECIPE_EXTRA_ID = "id";
-    public static final String RECIPE_EXTRA_NAME = "name";
-    public static final String RECIPE_EXTRA_INGREDIENTS = "listIdIngredients";
-    public static final String RECIPE_EXTRA_WEIGHTS = "listWeights";
+import amaury.todolist.utils.UnitUtils;
 
+public class RecipeDetail {
     private int id;
-    private String name;
-    private int[] listIdIngredients;
-    private double[] listWeights;
-    private Map<Double, Double> mapIngredients;
+    private int recipeId;
+    private int ingredientId;
+    private double quantity;
+    private String unit;
 
     public RecipeDetail() {
     }
 
-    public RecipeDetail(Intent intent) {
-        this.name = intent.getExtras().getString(RECIPE_EXTRA_NAME);
-        this.listIdIngredients = intent.getExtras().getIntArray(RECIPE_EXTRA_INGREDIENTS);
-        this.listWeights = intent.getExtras().getDoubleArray(RECIPE_EXTRA_WEIGHTS);
-        this.id = intent.getExtras().getInt(RECIPE_EXTRA_ID);
+    public RecipeDetail(int recipeId, int ingredientId, double quantity, String unit) {
+        this.recipeId = recipeId;
+        this.ingredientId = ingredientId;
+        this.quantity = quantity;
 
-        // each line of the view will reference the ingredient's name and its weight
-        // rather than carry the ingredient's value, we carry the Ingredient object's ID in the database
-        for (int i = 0; i < listIdIngredients.length; i++) {
-            mapIngredients.put(new Double(listIdIngredients[i]), new Double(listWeights[i]));
-        }
+        if ( unit != null)
+            this.unit = unit;
+        else
+            this.unit = UnitUtils.UNIT_GRAM;
     }
 
     public int getId() {
@@ -40,35 +36,35 @@ public class RecipeDetail {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public int getRecipeId() {
+        return recipeId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
     }
 
-    public int[] getListIdIngredients() {
-        return listIdIngredients;
+    public int getIngredientId() {
+        return ingredientId;
     }
 
-    public void setListIdIngredients(int[] listIdIngredients) {
-        this.listIdIngredients = listIdIngredients;
+    public void setIngredientId(int ingredientId) {
+        this.ingredientId = ingredientId;
     }
 
-    public double[] getListWeights() {
-        return listWeights;
+    public double getQuantity() {
+        return quantity;
     }
 
-    public void setListWeights(double[] listWeights) {
-        this.listWeights = listWeights;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 
-    public Map<Double, Double> getMapIngredients() {
-        return mapIngredients;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setMapIngredients(Map<Double, Double> mapIngredients) {
-        this.mapIngredients = mapIngredients;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 }

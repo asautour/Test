@@ -1,11 +1,19 @@
 
 package amaury.todolist.db;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import amaury.todolist.data.Recipe;
+import amaury.todolist.data.RecipeDetail;
 
 /*
     Defines all methods related to the "recipe_details" table in database.
@@ -54,7 +62,65 @@ public class RecipeDetailDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqlDB, int oldVersion, int newVersion) {
-        sqlDB.execSQL("DROP TABLE IF EXISTS "+ TABLE_RECIPE_DETAILS);
+        sqlDB.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPE_DETAILS);
         onCreate(sqlDB);
     }
+
+    public void addRecipeDetailToDb(RecipeDetail detail) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.clear();
+
+            values.put(RecipeDetailDBHelper.KEY_RECIPE_ID, detail.getRecipeId());
+            values.put(RecipeDetailDBHelper.KEY_INGREDIENT_ID, detail.getIngredientId());
+            values.put(RecipeDetailDBHelper.KEY_QUANTITY, detail.getQuantity());
+            values.put(RecipeDetailDBHelper.KEY_UNIT, detail.getUnit());
+
+            db.insertWithOnConflict(RecipeDetailDBHelper.TABLE_RECIPE_DETAILS, null, values,
+                    SQLiteDatabase.CONFLICT_IGNORE);
+        } catch (Exception e) {
+            Log.d(TABLE_RECIPE_DETAILS, "Error while trying to add recipe details to database");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public List<RecipeDetail> getRecipeDetails(int recipeId) {
+        List<RecipeDetail> recipeList = new ArrayList<RecipeDetail>();
+
+        SQLiteDatabase sqlDB = getReadableDatabase();
+        //onUpgrade(sqlDB,1,3);
+
+        String sqlQuery = String.format(
+                "SELECT * FROM %s WHERE %s = %d",
+                TABLE_RECIPE_DETAILS,
+                KEY_RECIPE_ID,
+                recipeId);
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sqlQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                RecipeDetail detail = new RecipeDetail();
+                detail.setId(Integer.parseInt(cursor.getString(0)));
+                detail.setRecipeId(Integer.parseInt(cursor.getString(1)));
+                detail.setIngredientId(Integer.parseInt(cursor.getString(2)));
+                detail.setQuantity(Double.parseDouble(cursor.getString(3)));
+                detail.setUnit(cursor.getString(4));
+                recipeList.add(detail);
+                // Adding recipe to list
+                //recipeList.add(recipe);
+            } while (cursor.moveToNext());
+        }
+
+        // return ingredients list
+        return recipeList;
+    }
+
 }
