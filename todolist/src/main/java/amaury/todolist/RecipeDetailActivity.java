@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -44,10 +45,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         this.recipeId = intent.getIntExtra(RecipeDetailDBHelper.KEY_RECIPE_ID, 1);
 
+
         helper = RecipeDBHelper.getInstance(RecipeDetailActivity.this);
         helperDetail = RecipeDetailDBHelper.getInstance(RecipeDetailActivity.this);
 
-        //setContentView(R.layout.view_recipe_detail);
+        //SQLiteDatabase sqlDB = helperDetail.getWritableDatabase();
+        //helperDetail.onUpgrade(sqlDB,1,3);
         updateUI();
     }
 
@@ -77,7 +80,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     --------------------------------------------------------------------------------------------- */
     private void showPopupAdd() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select an ingredient to add");
+        builder.setTitle("Pick an ingredient");
         final EditText inputField = new EditText(this);
         builder.setView(inputField);
 
@@ -85,11 +88,26 @@ public class RecipeDetailActivity extends AppCompatActivity {
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                RecipeDetail detail = new RecipeDetail(recipeId,1,1, UnitUtils.UNIT_GRAM);
+                RecipeDetail detail = new RecipeDetail(recipeId, 1, 1, UnitUtils.UNIT_GRAM);
                 helperDetail.addRecipeDetailToDb(detail);
                 updateUI();
             }
         });
+
+        /*CharSequence colors[] = new CharSequence[] {"red", "green", "blue", "black"};
+        Iterator it = listDetails.iterator();
+        while (it.hasNext()) {
+            RecipeDetail detail = (RecipeDetail) it.next();
+
+        }
+
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // the user clicked on colors[which]
+            }
+        });
+        builder.show();*/
 
         builder.setNegativeButton("Cancel", null);
         builder.create().show();
