@@ -146,5 +146,6 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+        db.close();
     }
 }

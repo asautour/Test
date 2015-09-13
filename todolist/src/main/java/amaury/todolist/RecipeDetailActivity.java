@@ -3,6 +3,7 @@ package amaury.todolist;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -12,26 +13,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListPopupWindow;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import amaury.todolist.data.Ingredient;
-import amaury.todolist.data.Recipe;
 import amaury.todolist.data.RecipeContent;
 import amaury.todolist.data.RecipeDetail;
+import amaury.todolist.db.DBUtils;
 import amaury.todolist.db.IngredientDBHelper;
 import amaury.todolist.db.RecipeDBHelper;
 import amaury.todolist.db.RecipeDetailDBHelper;
 import amaury.todolist.utils.RecipeDetailArrayAdapter;
-import amaury.todolist.utils.UnitUtils;
 
 public class RecipeDetailActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private RecipeContent recipeContent;
@@ -43,8 +41,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
 
     private IngredientDBHelper helperIngredient;
     private ListAdapter listIngredientsAdapter;
-    ListPopupWindow listPopupWindow;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +50,10 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
         Intent intent = getIntent();
         this.recipeId = intent.getIntExtra(RecipeDetailDBHelper.KEY_RECIPE_ID, 1);
 
-
         helper = RecipeDBHelper.getInstance(RecipeDetailActivity.this);
         helperDetail = RecipeDetailDBHelper.getInstance(RecipeDetailActivity.this);
+        helperIngredient = IngredientDBHelper.getInstance(this);
 
-        //SQLiteDatabase sqlDB = helperDetail.getWritableDatabase();
-        //helperDetail.onUpgrade(sqlDB,1,3);
         updateUI();
     }
 
@@ -90,49 +84,56 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
     --------------------------------------------------------------------------------------------- */
     private void showPopupAdd() {
         // first retrieve all ingredients from the database
-        helperIngredient = IngredientDBHelper.getInstance(RecipeDetailActivity.this);
-        List<Ingredient> listIngredients = helperIngredient.getAllIngredients();
+        final List<Ingredient> listIngredients = helperIngredient.getAllIngredients();
 
-        // then build the adapter for the popup window
-        /*listIngredientsAdapter = new ArrayAdapter(RecipeDetailActivity.this, R.layout.view_list,
-                listIngredients);
+        // populate IDs of all ingredients already in the recipe
+        Iterator<RecipeDetail> it = listDetails.iterator();
+        List<Integer> listId = new ArrayList<>();
+        for ( int i=0; i<listDetails.size(); i++ ) {
+            listId.add(listDetails.get(i).getIngredientId());
+        }
 
-        // display the list view
-        ListView listView = (ListView) findViewById(R.id.listview);
-        listView.setAdapter(listIngredientsAdapter);*/
+        final CharSequence[] seq = new CharSequence[listIngredients.size()];
+        final boolean[] bool = new boolean[listIngredients.size()];
+
+        for ( int i=0; i<listIngredients.size(); i++ ) {
+            Ingredient ing = listIngredients.get(i);
+            seq[i] = ing.getName();
+            bool[i] = listId.contains(ing.getId());
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Pick an ingredient");
-        final EditText inputField = new EditText(this);
-        builder.setView(inputField);
 
-        // when click on "Add", add ingredient to the RECIPE_NAMES table
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                RecipeDetail detail = new RecipeDetail(recipeId, 1, 1, UnitUtils.UNIT_GRAM);
-                helperDetail.addRecipeDetailToDb(detail);
+            public void onClick(DialogInterface dialog, int id) {
+                for (int i=0; i<bool.length; i++) {
+                    if ( bool[i] ) {
+                        // add ingredient to the recipe
+                        RecipeDetail detail = new RecipeDetail(recipeId,listIngredients.get(i).getId(),0, null);
+                        helperDetail.addRecipeDetailToDb(detail);
+                    }
+                }
+
                 updateUI();
             }
         });
 
-        CharSequence colors[] = new CharSequence[] {"red", "green", "blue", "black"};
-        Iterator it = listDetails.iterator();
-        while (it.hasNext()) {
-            RecipeDetail detail = (RecipeDetail) it.next();
-
-        }
-
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // the user clicked on colors[which]
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
             }
         });
-        builder.show();
 
-        /*builder.setNegativeButton("Cancel", null);
-        builder.create().show();*/
+        builder.setMultiChoiceItems(seq, bool, new DialogInterface.OnMultiChoiceClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                bool[which] = isChecked;
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     /* ---------------------------------------------------------------------------------------------
@@ -179,6 +180,5 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        listPopupWindow.dismiss();
     }
 }

@@ -68,6 +68,7 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+        db.close();
     }
 
     public Ingredient getIngredient(int id) {
@@ -134,6 +135,7 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
+        db.close();
     }
 
     public void deleteIngredient(String name) {
