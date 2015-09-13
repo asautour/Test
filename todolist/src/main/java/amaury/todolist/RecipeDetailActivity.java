@@ -9,9 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
+import android.widget.ListPopupWindow;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -24,18 +27,24 @@ import amaury.todolist.data.Ingredient;
 import amaury.todolist.data.Recipe;
 import amaury.todolist.data.RecipeContent;
 import amaury.todolist.data.RecipeDetail;
+import amaury.todolist.db.IngredientDBHelper;
 import amaury.todolist.db.RecipeDBHelper;
 import amaury.todolist.db.RecipeDetailDBHelper;
 import amaury.todolist.utils.RecipeDetailArrayAdapter;
 import amaury.todolist.utils.UnitUtils;
 
-public class RecipeDetailActivity extends AppCompatActivity {
+public class RecipeDetailActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private RecipeContent recipeContent;
     private int recipeId;
     private static RecipeDetailDBHelper helperDetail;
     private static RecipeDBHelper helper;
     private RecipeDetailArrayAdapter listAdapter;
     private List<RecipeDetail> listDetails;
+
+    private IngredientDBHelper helperIngredient;
+    private ListAdapter listIngredientsAdapter;
+    ListPopupWindow listPopupWindow;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +85,22 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     /* ---------------------------------------------------------------------------------------------
-
+        Shows a popup which allows the selection of available ingredients, as set in the
+        Ingredient view.
     --------------------------------------------------------------------------------------------- */
     private void showPopupAdd() {
+        // first retrieve all ingredients from the database
+        helperIngredient = IngredientDBHelper.getInstance(RecipeDetailActivity.this);
+        List<Ingredient> listIngredients = helperIngredient.getAllIngredients();
+
+        // then build the adapter for the popup window
+        /*listIngredientsAdapter = new ArrayAdapter(RecipeDetailActivity.this, R.layout.view_list,
+                listIngredients);
+
+        // display the list view
+        ListView listView = (ListView) findViewById(R.id.listview);
+        listView.setAdapter(listIngredientsAdapter);*/
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Pick an ingredient");
         final EditText inputField = new EditText(this);
@@ -94,7 +116,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
             }
         });
 
-        /*CharSequence colors[] = new CharSequence[] {"red", "green", "blue", "black"};
+        CharSequence colors[] = new CharSequence[] {"red", "green", "blue", "black"};
         Iterator it = listDetails.iterator();
         while (it.hasNext()) {
             RecipeDetail detail = (RecipeDetail) it.next();
@@ -107,10 +129,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 // the user clicked on colors[which]
             }
         });
-        builder.show();*/
+        builder.show();
 
-        builder.setNegativeButton("Cancel", null);
-        builder.create().show();
+        /*builder.setNegativeButton("Cancel", null);
+        builder.create().show();*/
     }
 
     /* ---------------------------------------------------------------------------------------------
@@ -153,5 +175,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
         // Display the list view
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(listAdapter2);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        listPopupWindow.dismiss();
     }
 }

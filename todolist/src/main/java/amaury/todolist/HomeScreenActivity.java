@@ -8,12 +8,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import amaury.todolist.db.DBUtils;
+
 public class HomeScreenActivity extends AppCompatActivity {
+    private boolean bDatabaseReset = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_home_screen);
+
+        if ( bDatabaseReset )
+            DBUtils.initiateDb(getBaseContext());
     }
 
     @Override

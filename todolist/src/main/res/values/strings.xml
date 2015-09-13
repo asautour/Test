@@ -6,4 +6,5 @@
     <string name="title_activity_home_screen">HomeScreen</string>
     <string name="title_activity_recipes">RecipesActivity</string>
     <string name="title_activity_recipe_detail">RecipeDetailActivity</string>
+    <string name="title_activity_ingredients_popup">IngredientsPopup</string>
 </resources>
