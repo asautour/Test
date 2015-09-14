@@ -18,6 +18,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import amaury.todolist.db.IngredientDBHelper;
+import amaury.todolist.utils.UiUtils;
 
 public class IngredientsActivity extends AppCompatActivity {
 
@@ -28,6 +29,7 @@ public class IngredientsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_list);
+        setTitle(UiUtils.TITLE_ACTIVITY_INGREDIENTS);
         updateUI();
     }
 

@@ -23,6 +23,7 @@ import amaury.todolist.db.IngredientDBHelper;
 import amaury.todolist.db.RecipeDBHelper;
 import amaury.todolist.db.RecipeDetailDBHelper;
 import amaury.todolist.utils.RecipeDetailArrayAdapter;
+import amaury.todolist.utils.UiUtils;
 
 public class RecipeDetailActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private RecipeContent recipeContent;
@@ -38,6 +39,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_list);
+        setTitle(UiUtils.TITLE_ACTIVITY_RECIPE_DETAILS);
 
         Intent intent = getIntent();
         this.recipeId = intent.getIntExtra(RecipeDetailDBHelper.KEY_RECIPE_ID, 1);

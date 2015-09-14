@@ -1,7 +1,6 @@
 package amaury.todolist;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,6 +21,7 @@ import android.widget.TextView;
 import amaury.todolist.data.Recipe;
 import amaury.todolist.db.RecipeDBHelper;
 import amaury.todolist.db.RecipeDetailDBHelper;
+import amaury.todolist.utils.UiUtils;
 
 /* *************************************************************************************************
 
@@ -35,6 +35,7 @@ public class RecipesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_list);
+        setTitle(UiUtils.TITLE_ACTIVITY_RECIPES);
         helper = RecipeDBHelper.getInstance(RecipesActivity.this);
         updateUI();
     }

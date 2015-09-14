@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import amaury.todolist.db.DBUtils;
+import amaury.todolist.utils.UiUtils;
 
 public class HomeScreenActivity extends AppCompatActivity {
     private boolean bDatabaseReset = false;
@@ -17,6 +18,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_home_screen);
+        setTitle(UiUtils.TITLE_ACTIVITY_HOME);
 
         if ( bDatabaseReset )
             DBUtils.initiateDb(getBaseContext());
