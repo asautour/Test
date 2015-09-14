@@ -90,7 +90,6 @@ public class IngredientsActivity extends AppCompatActivity {
     private void updateUI() {
         helper = IngredientDBHelper.getInstance(IngredientsActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
-        //helper.onUpgrade(sqlDB,1,3);
         Cursor cursor = sqlDB.query(IngredientDBHelper.TABLE_INGREDIENTS,
                 new String[]{IngredientDBHelper.KEY_ID, IngredientDBHelper.KEY_NAME},
                 null, null, null, null, null);
@@ -104,7 +103,6 @@ public class IngredientsActivity extends AppCompatActivity {
                 0
         );
 
-        //this.setListAdapter(listAdapter);
         // Display the list view
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(listAdapter);

@@ -36,8 +36,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
     private int recipeId;
     private static RecipeDetailDBHelper helperDetail;
     private static RecipeDBHelper helper;
-    private RecipeDetailArrayAdapter listAdapter;
-    private List<RecipeDetail> listDetails;
+    private ArrayList<RecipeDetail> listDetails;
 
     private IngredientDBHelper helperIngredient;
     private ListAdapter listIngredientsAdapter;
@@ -110,7 +109,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
                     if ( bool[i] ) {
                         // add ingredient to the recipe
                         RecipeDetail detail = new RecipeDetail(recipeId,listIngredients.get(i).getId(),0, null);
-                        helperDetail.addRecipeDetailToDb(detail);
+                        helperDetail.addRecipeDetailToDb(detail, true);
                     }
                 }
 
@@ -142,7 +141,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
     private void updateUI() {
         listDetails = helperDetail.getRecipeDetails(recipeId);
 
-        String[] tableColumns = new String[] {
+        ListAdapter adapter = new RecipeDetailArrayAdapter(this, 0, listDetails);
+
+        /*String[] tableColumns = new String[] {
             RecipeDetailDBHelper.KEY_ID,
             RecipeDetailDBHelper.KEY_INGREDIENT_ID,
             RecipeDetailDBHelper.KEY_QUANTITY,
@@ -152,30 +153,26 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
         String[] whereArgs = new String[] { String.valueOf(recipeId) };
 
         SQLiteDatabase sqlDB = helperDetail.getReadableDatabase();
-        //helperDetail.onUpgrade(sqlDB,1,3);
-        Cursor cursor = sqlDB.query(RecipeDetailDBHelper.TABLE_RECIPE_DETAILS,
+        Cursor cursor = sqlDB.query(
+                RecipeDetailDBHelper.TABLE_RECIPE_DETAILS,
                 tableColumns, whereClause, whereArgs, null,null,null);
 
-        ListAdapter listAdapter2 = new SimpleCursorAdapter(
+        ListAdapter listAdapter = new SimpleCursorAdapter(
                 this,
                 R.layout.view_recipe_detail,
                 cursor,
                 // map the following columns in the recipe_details table to...
                 new String[] {
-                        RecipeDetailDBHelper.KEY_INGREDIENT_ID,
+                        helperIngredient.getIngredient(RecipeDetailDBHelper.KEY_INGREDIENT_ID).getName(),
                         RecipeDetailDBHelper.KEY_QUANTITY // + RecipeDetailDBHelper.KEY_UNIT
                 },
                 // the following view fields in view_recipe_detail.xml
                 new int[] { R.id.textRecipeIngredient, R.id.textIngredientQty },
-                0){};
-
-        /*listAdapter = new RecipeDetailArrayAdapter(
-                this,
-                listDetails);*/
+                0){};*/
 
         // Display the list view
         ListView listView = (ListView) findViewById(R.id.listview);
-        listView.setAdapter(listAdapter2);
+        listView.setAdapter(adapter);
     }
 
     @Override

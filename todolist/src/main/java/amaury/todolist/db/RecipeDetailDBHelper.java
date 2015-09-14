@@ -10,9 +10,6 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import amaury.todolist.data.Recipe;
 import amaury.todolist.data.RecipeDetail;
 
 /* *************************************************************************************************
@@ -66,10 +63,33 @@ public class RecipeDetailDBHelper extends SQLiteOpenHelper {
         onCreate(sqlDB);
     }
 
+    public void addRecipeDetailToDb(RecipeDetail detail, Boolean bCheckExist) {
+        if ( bCheckExist ) {
+            // select * from
+            SQLiteDatabase sqlDB = getReadableDatabase();
+            String sqlQuery = String.format(
+                    "SELECT * FROM %s WHERE %s = %d and %s = %d",
+                    TABLE_RECIPE_DETAILS,
+                    KEY_RECIPE_ID,
+                    detail.getRecipeId(),
+                    KEY_INGREDIENT_ID,
+                    detail.getIngredientId());
+
+            Cursor cursor = sqlDB.rawQuery(sqlQuery, null);
+
+            if (cursor == null || !cursor.moveToFirst()) {
+                addRecipeDetailToDb(detail);
+            }
+
+        }
+        else
+            addRecipeDetailToDb(detail);
+    }
+
     /* ---------------------------------------------------------------------------------------------
 
     --------------------------------------------------------------------------------------------- */
-    public void addRecipeDetailToDb(RecipeDetail detail) {
+    private void addRecipeDetailToDb(RecipeDetail detail) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
@@ -97,11 +117,10 @@ public class RecipeDetailDBHelper extends SQLiteOpenHelper {
     /* ---------------------------------------------------------------------------------------------
 
     --------------------------------------------------------------------------------------------- */
-    public List<RecipeDetail> getRecipeDetails(int recipeId) {
-        List<RecipeDetail> recipeList = new ArrayList<>();
+    public ArrayList<RecipeDetail> getRecipeDetails(int recipeId) {
+        ArrayList<RecipeDetail> recipeList = new ArrayList<>();
 
         SQLiteDatabase sqlDB = getReadableDatabase();
-        //onUpgrade(sqlDB,1,3);
 
         String sqlQuery = String.format(
                 "SELECT * FROM %s WHERE %s = %d",
@@ -109,8 +128,7 @@ public class RecipeDetailDBHelper extends SQLiteOpenHelper {
                 KEY_RECIPE_ID,
                 recipeId);
 
-        String query = "SELECT * FROM recipe_details";
-        Cursor cursor = sqlDB.rawQuery(query, null);
+        Cursor cursor = sqlDB.rawQuery(sqlQuery, null);
 
         // looping through all rows and adding to list
         if (cursor != null && cursor.moveToFirst()) {
