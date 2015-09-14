@@ -132,7 +132,7 @@ public class RecipeDetailDBHelper extends SQLiteOpenHelper {
 
         // looping through all rows and adding to list
         if (cursor != null && cursor.moveToFirst()) {
-            while (cursor.moveToNext()) {
+            do {
                 RecipeDetail detail = new RecipeDetail();
                 detail.setId(Integer.parseInt(cursor.getString(0)));
                 detail.setRecipeId(Integer.parseInt(cursor.getString(1)));
@@ -142,11 +142,35 @@ public class RecipeDetailDBHelper extends SQLiteOpenHelper {
 
                 // Adding recipe to list
                 recipeList.add(detail);
-            }
+
+            } while (cursor.moveToNext());
         }
 
         // return ingredients list
         return recipeList;
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
+    public void removeRecipeDetailFromDb(int recipeId, int ingredientId) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_RECIPE_DETAILS,
+                    KEY_RECIPE_ID + "=? and " + KEY_INGREDIENT_ID + "=?",
+                    new String[]{String.valueOf(recipeId),String.valueOf(ingredientId)});
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_RECIPE_DETAILS,
+                    "Error while trying to remove recipe details to database - recipeId " +
+                    recipeId +
+                    ", ingredientId " +
+                    ingredientId);
+        } finally {
+            db.endTransaction();
+        }
+        db.close();
+    }
 }

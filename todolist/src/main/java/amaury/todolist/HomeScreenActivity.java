@@ -11,7 +11,7 @@ import android.widget.Button;
 import amaury.todolist.db.DBUtils;
 
 public class HomeScreenActivity extends AppCompatActivity {
-    private boolean bDatabaseReset = true;
+    private boolean bDatabaseReset = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
