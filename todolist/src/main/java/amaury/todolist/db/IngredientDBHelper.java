@@ -52,6 +52,9 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
         onCreate(sqlDB);
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
     void addIngredient(Ingredient ingredient) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -71,6 +74,34 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
+    public void addIngredientToDb(String ingredientName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME, ingredientName); // Contact Name
+
+            // TODO manage insert of an ingredient already in the db
+
+            // Inserting Row
+            long result = db.insertWithOnConflict(TABLE_INGREDIENTS, null, values,0);
+            Log.d(TABLE_INGREDIENTS, "Insert into the ingredients table, result " + result);
+        } catch (Exception e) {
+            Log.d(TABLE_INGREDIENTS, "Error while trying to add post to database");
+        } finally {
+            db.endTransaction();
+        }
+        db.close();
+    }
+
+
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
     public Ingredient getIngredient(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -88,6 +119,9 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
             return null;
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
     public List<Ingredient> getAllIngredients() {
         List<Ingredient> ingredientList = new ArrayList<Ingredient>();
         // Select All Query
@@ -111,6 +145,9 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
         return ingredientList;
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
     public int updateIngredient(Ingredient ingredient) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -122,6 +159,9 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
                 new String[] { String.valueOf(ingredient.getId()) });
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
     public void deleteIngredient(Ingredient ingredient) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -138,6 +178,9 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
     public void deleteIngredient(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
 

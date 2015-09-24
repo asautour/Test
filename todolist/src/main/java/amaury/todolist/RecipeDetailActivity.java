@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -17,7 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import amaury.todolist.data.Ingredient;
-import amaury.todolist.data.RecipeContent;
 import amaury.todolist.data.RecipeDetail;
 import amaury.todolist.db.IngredientDBHelper;
 import amaury.todolist.db.RecipeDBHelper;
@@ -26,14 +26,13 @@ import amaury.todolist.utils.RecipeDetailArrayAdapter;
 import amaury.todolist.utils.UiUtils;
 
 public class RecipeDetailActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    private RecipeContent recipeContent;
     private int recipeId;
     private static RecipeDetailDBHelper helperDetail;
     private static RecipeDBHelper helper;
     private ArrayList<RecipeDetail> listDetails;
 
     private IngredientDBHelper helperIngredient;
-    private ListAdapter listIngredientsAdapter;
+    private EditText quantityField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,5 +145,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        RecipeDetail detail = listDetails.get(position);
+
     }
 }

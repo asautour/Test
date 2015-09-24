@@ -21,7 +21,6 @@ import amaury.todolist.db.IngredientDBHelper;
 import amaury.todolist.utils.UiUtils;
 
 public class IngredientsActivity extends AppCompatActivity {
-
     private IngredientDBHelper helper;
     private ListAdapter listAdapter;
 
@@ -54,41 +53,32 @@ public class IngredientsActivity extends AppCompatActivity {
         }
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+    --------------------------------------------------------------------------------------------- */
     private void showPopupAdd() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add an ingredient");
-        //builder.setMessage("What do you want to do?");
+        builder.setTitle(UiUtils.TITLE_POPUP_ADD_INGREDIENT);
         final EditText inputField = new EditText(this);
         builder.setView(inputField);
 
         // when click on "Add", add ingredient to the INGREDIENT table
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(UiUtils.ADD, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                addIngredientToDb(inputField);
+                //addIngredientToDb(inputField);
+                helper.addIngredientToDb(inputField.getText().toString());
                 updateUI();
             }
         });
 
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton(UiUtils.CANCEL, null);
         builder.create().show();
     }
 
-    private void addIngredientToDb(EditText inputField) {
-        String ingredientName = inputField.getText().toString();
-        Log.d("IngredientsActivity", ingredientName);
+    /* ---------------------------------------------------------------------------------------------
 
-        IngredientDBHelper helper = IngredientDBHelper.getInstance(IngredientsActivity.this);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.clear();
-        values.put(IngredientDBHelper.KEY_NAME, ingredientName);
-
-        db.insertWithOnConflict(IngredientDBHelper.TABLE_INGREDIENTS, null, values,
-                SQLiteDatabase.CONFLICT_IGNORE);
-    }
-
+    --------------------------------------------------------------------------------------------- */
     private void updateUI() {
         helper = IngredientDBHelper.getInstance(IngredientsActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
@@ -111,10 +101,16 @@ public class IngredientsActivity extends AppCompatActivity {
 
     }
 
+    /* ---------------------------------------------------------------------------------------------
+        When clicking on the remove button, we delete the ingredient from the database
+    --------------------------------------------------------------------------------------------- */
     public void onRemoveIngredientClick(View view) {
         View v = (View) view.getParent();
         TextView ingredientTextView = (TextView) v.findViewById(R.id.ingredientNameView);
         helper.deleteIngredient(ingredientTextView.getText().toString());
+
+        // TODO on ingredient remove make sure all the relevant cleanup is done on recipe/db
+
         updateUI();
     }
 }

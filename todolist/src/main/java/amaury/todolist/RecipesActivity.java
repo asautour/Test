@@ -129,7 +129,7 @@ public class RecipesActivity extends AppCompatActivity {
     }
 
     /* ---------------------------------------------------------------------------------------------
-        On recipe click, the details screen is open with the list of ingredients, associated
+        On recipe click, the details screen is opened with the list of ingredients, associated
         quantities and the relevant units.
     --------------------------------------------------------------------------------------------- */
     public void onRecipeClick(View view) {
