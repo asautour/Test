@@ -14,4 +14,5 @@ public class UiUtils {
     public static final String ADD = "Add";
     public static final String CANCEL = "Cancel";
     public static final String REMOVE = "Remove";
+    public static final String NAME = "Name";
 }

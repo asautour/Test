@@ -140,6 +140,7 @@ public class RecipesActivity extends AppCompatActivity {
         Recipe recipe = helper.getRecipe(textView.getText().toString());
         Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
         intent.putExtra(RecipeDetailDBHelper.KEY_RECIPE_ID, recipe.getId());
+        intent.putExtra(UiUtils.NAME, recipe.getName());
         startActivity(intent);
     }
 }

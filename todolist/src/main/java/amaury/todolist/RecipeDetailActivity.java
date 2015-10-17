@@ -40,9 +40,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_list);
-        setTitle(UiUtils.TITLE_ACTIVITY_RECIPE_DETAILS);
 
         Intent intent = getIntent();
+        setTitle(intent.getStringExtra(UiUtils.NAME));
         this.recipeId = intent.getIntExtra(RecipeDetailDBHelper.KEY_RECIPE_ID, 1);
 
         helper = RecipeDBHelper.getInstance(RecipeDetailActivity.this);
