@@ -2,13 +2,19 @@ package amaury.todolist.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,6 +25,7 @@ import amaury.todolist.RecipeDetailActivity;
 import amaury.todolist.data.Ingredient;
 import amaury.todolist.data.RecipeDetail;
 import amaury.todolist.db.IngredientDBHelper;
+import amaury.todolist.db.RecipeDetailDBHelper;
 
 /**
  * Created by su on 06/09/2015.
@@ -28,6 +35,7 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
     private ArrayList<RecipeDetail> listDetails;
     private static LayoutInflater inflater = null;
     private IngredientDBHelper ingredientDBHelper = IngredientDBHelper.getInstance(activity);
+    private RecipeDetailDBHelper detailDBHelper = RecipeDetailDBHelper.getInstance(activity);
 
     public RecipeDetailArrayAdapter (Activity activity, int textViewResourceId,ArrayList<RecipeDetail> details) {
         super(activity, textViewResourceId, details);
@@ -54,9 +62,10 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, final View convertView, ViewGroup parent) {
         View vi = convertView;
         final ViewHolder holder;
+
         try {
             if (convertView == null) {
                 vi = inflater.inflate(R.layout.view_recipe_detail, null);
@@ -65,22 +74,10 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
                 holder.display_name = (TextView) vi.findViewById(R.id.textRecipeIngredient);
                 holder.display_number = (TextView) vi.findViewById(R.id.textIngredientQty);
 
-                holder.display_number.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        int i = 0;
-                        i *= 2;
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-                });
-
+                holder.display_number.setInputType(Configuration.KEYBOARD_12KEY);
+                holder.display_number.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                holder.display_number.setSelectAllOnFocus(true);
+                holder.display_number.setOnEditorActionListener(new DetailEditorActionListener(holder.display_number, listDetails, position, detailDBHelper));
                 vi.setTag(holder);
             } else {
                 holder = (ViewHolder) vi.getTag();
@@ -98,6 +95,4 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
         }
         return vi;
     }
-
-
 }

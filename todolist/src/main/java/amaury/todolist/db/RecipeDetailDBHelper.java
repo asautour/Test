@@ -63,6 +63,23 @@ public class RecipeDetailDBHelper extends SQLiteOpenHelper {
         onCreate(sqlDB);
     }
 
+    /* ---------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------- */
+    public int updateDetail(RecipeDetail detail) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_RECIPE_ID, detail.getRecipeId());
+        values.put(KEY_INGREDIENT_ID, detail.getIngredientId());
+        values.put(KEY_QUANTITY, detail.getQuantity());
+        values.put(KEY_UNIT, detail.getUnit());
+
+        // updating row
+        return db.update(TABLE_RECIPE_DETAILS, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(detail.getId()) });
+    }
+
     public void addRecipeDetailToDb(RecipeDetail detail, Boolean bCheckExist) {
         if ( bCheckExist ) {
             // select * from
