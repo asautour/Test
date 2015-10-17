@@ -2,6 +2,8 @@ package amaury.todolist.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +64,22 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
 
                 holder.display_name = (TextView) vi.findViewById(R.id.textRecipeIngredient);
                 holder.display_number = (TextView) vi.findViewById(R.id.textIngredientQty);
+
+                holder.display_number.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        int i = 0;
+                        i *= 2;
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+                });
 
                 vi.setTag(holder);
             } else {

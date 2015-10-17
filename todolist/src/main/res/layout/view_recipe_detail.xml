@@ -6,10 +6,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
+        android:id="@+id/textRecipeIngredient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ingredient..."
-        android:id="@+id/textRecipeIngredient"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -20,13 +20,15 @@
         android:clickable="false" />
 
     <EditText
+        android:id="@+id/textIngredientQty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="qty"
         android:textSize="20dp"
-        android:id="@+id/textIngredientQty"
+        android:clickable="true"
+        android:inputType="number"
+        android:singleLine="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
-
 </RelativeLayout>

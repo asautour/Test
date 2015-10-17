@@ -80,22 +80,14 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
     public void addIngredientToDb(String ingredientName) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.beginTransaction();
-        try {
-            ContentValues values = new ContentValues();
-            values.put(KEY_NAME, ingredientName); // Contact Name
+        ContentValues values = new ContentValues();
 
-            // TODO manage insert of an ingredient already in the db
+        values.clear();
+        values.put(KEY_NAME, ingredientName);
 
-            // Inserting Row
-            long result = db.insertWithOnConflict(TABLE_INGREDIENTS, null, values,0);
-            Log.d(TABLE_INGREDIENTS, "Insert into the ingredients table, result " + result);
-        } catch (Exception e) {
-            Log.d(TABLE_INGREDIENTS, "Error while trying to add post to database");
-        } finally {
-            db.endTransaction();
-        }
-        db.close();
+        long result = db.insertWithOnConflict(TABLE_INGREDIENTS, null, values,
+                SQLiteDatabase.CONFLICT_IGNORE);
+        Log.d("addIngredientToDb ", String.valueOf(result));
     }
 
 

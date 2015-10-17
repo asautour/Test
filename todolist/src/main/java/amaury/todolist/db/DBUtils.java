@@ -10,6 +10,7 @@ public class DBUtils {
 
     public static final String DATABASE_NAME = "recipeManager";
     public static final int DATABASE_VERSION = 3;
+    public static final boolean DATABASE_RESET = false;
 
     public static void initiateDb(Context context) {
         IngredientDBHelper helperIngredient = IngredientDBHelper.getInstance(context);

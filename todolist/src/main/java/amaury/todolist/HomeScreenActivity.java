@@ -12,7 +12,7 @@ import amaury.todolist.db.DBUtils;
 import amaury.todolist.utils.UiUtils;
 
 public class HomeScreenActivity extends AppCompatActivity {
-    private boolean bDatabaseReset = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +20,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         setContentView(R.layout.view_home_screen);
         setTitle(UiUtils.TITLE_ACTIVITY_HOME);
 
-        if ( bDatabaseReset )
+        if ( DBUtils.DATABASE_RESET )
             DBUtils.initiateDb(getBaseContext());
     }
 
