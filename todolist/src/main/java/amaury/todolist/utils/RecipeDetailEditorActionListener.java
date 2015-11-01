@@ -16,13 +16,13 @@ import amaury.todolist.db.RecipeDetailDBHelper;
 /**
  * Created by su on 17/10/2015.
  */
-public class DetailEditorActionListener implements EditText.OnEditorActionListener {
+public class RecipeDetailEditorActionListener implements EditText.OnEditorActionListener {
     private TextView view;
     private ArrayList<RecipeDetail> listDetails;
     private int position;
     private RecipeDetailDBHelper detailDBHelper;
 
-    public DetailEditorActionListener(TextView view, ArrayList<RecipeDetail> listDetails, int position, RecipeDetailDBHelper detailDBHelper ) {
+    public RecipeDetailEditorActionListener(TextView view, ArrayList<RecipeDetail> listDetails, int position, RecipeDetailDBHelper detailDBHelper) {
         this.view = view;
         this.listDetails = listDetails;
         this.position = position;

@@ -1,38 +1,35 @@
 package amaury.todolist.db;
 
 import android.content.ContentValues;
- import android.content.Context;
- import android.database.Cursor;
- import android.database.sqlite.SQLiteDatabase;
- import android.database.sqlite.SQLiteOpenHelper;
- import android.provider.BaseColumns;
- import android.util.Log;
-import android.widget.EditText;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.util.ArrayList;
- import java.util.List;
+import java.util.List;
 
-import amaury.todolist.data.Ingredient;
-import amaury.todolist.data.Recipe;
-import amaury.todolist.data.RecipeDetail;
+import amaury.todolist.data.Cake;
 
-public class RecipeDBHelper extends SQLiteOpenHelper {
-    public static final String TABLE_RECIPE_NAMES   = "recipe_names";
+public class CakeDBHelper extends SQLiteOpenHelper {
+    public static final String TABLE_CAKE_NAMES     = "cakes";
     public static final String KEY_ID               = BaseColumns._ID;
-    public static final String KEY_NAME             = "recipe";
+    public static final String KEY_NAME             = "cake_name";
 
-    private static RecipeDBHelper sInstance;
+    private static CakeDBHelper sInstance;
 
-    public static synchronized RecipeDBHelper getInstance(Context context) {
+    public static synchronized CakeDBHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
         if (sInstance == null)
-            sInstance = new RecipeDBHelper(context.getApplicationContext());
+            sInstance = new CakeDBHelper(context.getApplicationContext());
         return sInstance;
     }
 
-    public RecipeDBHelper(Context context) {
+    public CakeDBHelper(Context context) {
         super(context, DBUtils.DATABASE_NAME, null, DBUtils.DATABASE_VERSION);
     }
 
@@ -42,51 +39,51 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
                 "CREATE TABLE %s (" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "%s TEXT)",
-                TABLE_RECIPE_NAMES,
+                TABLE_CAKE_NAMES,
                 KEY_NAME);
 
-        Log.d("RecipeDBHelper", "Query to form table: " + sqlQuery);
+        Log.d("CakeDBHelper", "Query to form table: " + sqlQuery);
         sqlDB.execSQL(sqlQuery);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqlDB, int oldVersion, int newVersion) {
-        sqlDB.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPE_NAMES);
+        sqlDB.execSQL("DROP TABLE IF EXISTS " + TABLE_CAKE_NAMES);
         onCreate(sqlDB);
     }
 
     /* ---------------------------------------------------------------------------------------------
 
     --------------------------------------------------------------------------------------------- */
-    public void addRecipeToDb(String recipeName) {
-        Log.d("RecipesActivity", recipeName);
+    public void addCakeToDb(String cakeName) {
+        Log.d("CakesActivity", cakeName);
 
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.clear();
-        values.put(RecipeDBHelper.KEY_NAME, recipeName);
+        values.put(CakeDBHelper.KEY_NAME, cakeName);
 
-        long result = db.insertWithOnConflict(RecipeDBHelper.TABLE_RECIPE_NAMES, null, values,
+        long result = db.insertWithOnConflict(CakeDBHelper.TABLE_CAKE_NAMES, null, values,
                 SQLiteDatabase.CONFLICT_IGNORE);
-        Log.d("addRecipeToDb ", String.valueOf(result));
+        Log.d("addCakeToDb ", String.valueOf(result));
     }
 
     /* ---------------------------------------------------------------------------------------------
 
     --------------------------------------------------------------------------------------------- */
-    public Recipe getRecipe(String name) {
+    public Cake getCake(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(
-                TABLE_RECIPE_NAMES,
-                new String[]{KEY_ID, KEY_NAME},
+                TABLE_CAKE_NAMES,
+                new String[] { KEY_ID, KEY_NAME },
                 KEY_NAME + "=?",
-                new String[]{String.valueOf(name)},
+                new String[] { String.valueOf(name) },
                 null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
-            return new Recipe(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
+            return new Cake(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
         }
         else
             return null;
@@ -95,10 +92,10 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
     /* ---------------------------------------------------------------------------------------------
 
     --------------------------------------------------------------------------------------------- */
-    public List<Recipe> getAllRecipes() {
-        List<Recipe> recipeList = new ArrayList<>();
+    public List<Cake> getAllCakes() {
+        List<Cake> cakeList = new ArrayList<>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_RECIPE_NAMES;
+        String selectQuery = "SELECT  * FROM " + TABLE_CAKE_NAMES;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -106,64 +103,47 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                Recipe recipe = new Recipe();
-                recipe.setId(Integer.parseInt(cursor.getString(0)));
-                recipe.setName(cursor.getString(1));
-                // Adding recipe to list
-                recipeList.add(recipe);
+                Cake cake = new Cake();
+                cake.setId(Integer.parseInt(cursor.getString(0)));
+                cake.setName(cursor.getString(1));
+                // Adding cake to list
+                cakeList.add(cake);
             } while (cursor.moveToNext());
         }
 
         // return ingredients list
-        return recipeList;
+        return cakeList;
     }
 
     /* ---------------------------------------------------------------------------------------------
 
     --------------------------------------------------------------------------------------------- */
-    public int updateRecipe(Recipe recipe) {
+    public int updateCake(Cake cake) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, recipe.getName());
+        values.put(KEY_NAME, cake.getName());
 
         // updating row
-        return db.update(TABLE_RECIPE_NAMES, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(recipe.getId()) });
+        return db.update(TABLE_CAKE_NAMES, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(cake.getId()) });
     }
 
     /* ---------------------------------------------------------------------------------------------
 
     --------------------------------------------------------------------------------------------- */
-    public void deleteRecipe(String name) {
+    public void deleteCake(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.beginTransaction();
         try {
-            db.delete(TABLE_RECIPE_NAMES, KEY_NAME + " = ?",  new String[]{name});
+            db.delete(TABLE_CAKE_NAMES, KEY_NAME + " = ?",  new String[]{name});
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.d(TABLE_RECIPE_NAMES, "Error while trying to delete a recipe: " + name);
+            Log.d(TABLE_CAKE_NAMES, "Error while trying to delete a cake: " + name);
         } finally {
             db.endTransaction();
         }
         db.close();
-    }
-
-    public Recipe getRecipe(int recipeId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(
-                TABLE_RECIPE_NAMES,
-                new String[] { KEY_ID },
-                KEY_ID + "=?",
-                new String[] { String.valueOf(recipeId) },
-                null, null, null, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-            return new Recipe(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
-        }
-        else
-            return null;
     }
 }

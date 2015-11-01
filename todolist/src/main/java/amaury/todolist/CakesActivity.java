@@ -18,32 +18,32 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import amaury.todolist.data.Recipe;
-import amaury.todolist.db.RecipeDBHelper;
-import amaury.todolist.db.RecipeDetailDBHelper;
+import amaury.todolist.data.Cake;
+import amaury.todolist.db.CakeDBHelper;
+import amaury.todolist.db.CakeDetailDBHelper;
 import amaury.todolist.utils.UiUtils;
 
 /* *************************************************************************************************
 
 ************************************************************************************************* */
-public class RecipesActivity extends AppCompatActivity {
+public class CakesActivity extends AppCompatActivity {
 
-    private static RecipeDBHelper helper;
+    private static CakeDBHelper helper;
     private ListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_list);
-        setTitle(UiUtils.TITLE_ACTIVITY_RECIPES);
-        helper = RecipeDBHelper.getInstance(RecipesActivity.this);
+        setTitle(UiUtils.TITLE_ACTIVITY_CAKES);
+        helper = CakeDBHelper.getInstance(CakesActivity.this);
         updateUI();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu_recipes; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_recipes, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_cakes, menu);
         return true;
     }
 
@@ -53,7 +53,7 @@ public class RecipesActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_add_recipe:
+            case R.id.action_add_cake:
                 showPopupAdd();
                 return true;
 
@@ -67,16 +67,16 @@ public class RecipesActivity extends AppCompatActivity {
     --------------------------------------------------------------------------------------------- */
     private void showPopupAdd() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add a recipe");
+        builder.setTitle("Add a cake");
         final EditText inputField = new EditText(this);
         builder.setView(inputField);
 
-        // when click on "Add", add ingredient to the RECIPE_NAMES table
+        // when click on "Add", add ingredient to the CAKE_NAMES table
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-            helper.addRecipeToDb(inputField.getText().toString());
-            updateUI();
+                helper.addCakeToDb(inputField.getText().toString());
+                updateUI();
             }
         });
 
@@ -89,16 +89,16 @@ public class RecipesActivity extends AppCompatActivity {
     --------------------------------------------------------------------------------------------- */
     private void updateUI() {
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
-        Cursor cursor = sqlDB.query(RecipeDBHelper.TABLE_RECIPE_NAMES,
-                new String[]{RecipeDBHelper.KEY_ID, RecipeDBHelper.KEY_NAME},
+        Cursor cursor = sqlDB.query(CakeDBHelper.TABLE_CAKE_NAMES,
+                new String[]{CakeDBHelper.KEY_ID, CakeDBHelper.KEY_NAME},
                 null,null,null,null,null);
 
         listAdapter = new SimpleCursorAdapter(
                 this,
-                R.layout.view_recipes,
+                R.layout.view_cakes,
                 cursor,
-                new String[]{RecipeDBHelper.KEY_NAME},
-                new int[]{R.id.recipeTextView},
+                new String[]{CakeDBHelper.KEY_NAME},
+                new int[]{R.id.cakeTextView},
                 0
         );
 
@@ -106,13 +106,13 @@ public class RecipesActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(listAdapter);
 
-        // TODO update code on recipe long click action
+        // TODO update code on cake long click action
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
-            Log.v("long clicked", "pos: " + pos);
-            return true;
+                Log.v("long clicked", "pos: " + pos);
+                return true;
             }
         });
     }
@@ -120,26 +120,27 @@ public class RecipesActivity extends AppCompatActivity {
     /* ---------------------------------------------------------------------------------------------
 
     --------------------------------------------------------------------------------------------- */
-    public void onRemoveRecipeClick(View view) {
+    public void onRemoveCakeClick(View view) {
         View v = (View) view.getParent();
-        TextView textView = (TextView) v.findViewById(R.id.recipeTextView);
-        helper.deleteRecipe(textView.getText().toString());
+        TextView textView = (TextView) v.findViewById(R.id.cakeTextView);
+        helper.deleteCake(textView.getText().toString());
         updateUI();
     }
 
     /* ---------------------------------------------------------------------------------------------
-        On recipe click, the details screen is opened with the list of ingredients, associated
+        On cake click, the details screen is opened with the list of ingredients, associated
         quantities and the relevant units.
     --------------------------------------------------------------------------------------------- */
-    public void onRecipeClick(View view) {
+    public void onCakeClick(View view) {
         View v = (View) view.getParent();
-        TextView textView = (TextView) v.findViewById(R.id.recipeTextView);
+        TextView textView = (TextView) v.findViewById(R.id.cakeTextView);
 
-        // Parameter to build the detailed view is the recipe's ID.
-        Recipe recipe = helper.getRecipe(textView.getText().toString());
-        Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
-        intent.putExtra(RecipeDetailDBHelper.KEY_RECIPE_ID, recipe.getId());
-        intent.putExtra(UiUtils.NAME, recipe.getName());
+        // Parameter to build the detailed view is the cake's ID.
+        Cake cake = helper.getCake(textView.getText().toString());
+        Intent intent = new Intent(getApplicationContext(), CakeDetailActivity.class);
+        intent.putExtra(CakeDetailDBHelper.KEY_CAKE_ID, cake.getId());
+        intent.putExtra(UiUtils.NAME, cake.getName());
         startActivity(intent);
     }
+
 }

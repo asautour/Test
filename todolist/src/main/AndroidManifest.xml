@@ -46,6 +46,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".RecipeDetailActivity" />
         </activity>
+        <activity
+            android:name=".CakesActivity"
+            android:label="@string/title_activity_cakes"
+            android:parentActivityName=".HomeScreenActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="amaury.todolist.HomeScreenActivity" />
+        </activity>
+        <activity
+            android:name=".CakeDetailActivity"
+            android:label="@string/title_activity_cake_detail"
+            android:parentActivityName=".CakesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CakesActivity" />
+        </activity>
     </application>
 
 </manifest>

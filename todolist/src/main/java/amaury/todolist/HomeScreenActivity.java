@@ -42,6 +42,7 @@ public class HomeScreenActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeScreenActivity.this, RecipesActivity.class));
                 break;
             case R.id.buttonCakes:
+                startActivity(new Intent(HomeScreenActivity.this, CakesActivity.class));
                 break;
             default:
                 break;

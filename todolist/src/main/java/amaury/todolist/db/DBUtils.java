@@ -24,6 +24,14 @@ public class DBUtils {
         RecipeDetailDBHelper helperDetail = RecipeDetailDBHelper.getInstance(context);
         sqlDB = helperDetail.getWritableDatabase();
         helperDetail.onUpgrade(sqlDB,1,DATABASE_VERSION);
+
+        CakeDBHelper helperCake = CakeDBHelper.getInstance(context);
+        sqlDB = helperCake.getWritableDatabase();
+        helperCake.onUpgrade(sqlDB,1,DATABASE_VERSION);
+
+        CakeDetailDBHelper helperCakeDetail = CakeDetailDBHelper.getInstance(context);
+        sqlDB = helperCakeDetail.getWritableDatabase();
+        helperCakeDetail.onUpgrade(sqlDB,1,DATABASE_VERSION);
     }
 
     /* returns an ingredient name from the INGREDIENT table using its unique ID */

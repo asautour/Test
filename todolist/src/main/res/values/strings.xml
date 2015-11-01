@@ -7,4 +7,6 @@
     <string name="title_activity_recipes">RecipesActivity</string>
     <string name="title_activity_recipe_detail">RecipeDetailActivity</string>
     <string name="title_activity_ingredients_popup">IngredientsPopup</string>
+    <string name="title_activity_cakes">My cakes</string>
+    <string name="title_activity_cake_detail">CakeDetailActivity</string>
 </resources>

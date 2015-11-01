@@ -9,6 +9,7 @@ public class UiUtils {
     public static final String TITLE_ACTIVITY_RECIPE_DETAILS    = "Select recipe ingredients";
     public static final String TITLE_ACTIVITY_HOME              = "Recipe Manager";
     public static final String TITLE_ACTIVITY_CAKES             = "My cakes";
+    public static final String TITLE_ACTIVITY_CAKE_DETAILS      = "Select recipes";
 
     public static final String TITLE_POPUP_ADD_INGREDIENT   = "Add an ingredient";
     public static final String ADD                          = "Add";

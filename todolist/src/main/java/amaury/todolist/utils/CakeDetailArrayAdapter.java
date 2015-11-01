@@ -13,22 +13,22 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import amaury.todolist.R;
-import amaury.todolist.data.Ingredient;
-import amaury.todolist.data.RecipeDetail;
-import amaury.todolist.db.IngredientDBHelper;
-import amaury.todolist.db.RecipeDetailDBHelper;
+import amaury.todolist.data.CakeDetail;
+import amaury.todolist.data.Recipe;
+import amaury.todolist.db.CakeDetailDBHelper;
+import amaury.todolist.db.RecipeDBHelper;
 
 /**
  * Created by su on 06/09/2015.
  */
-public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
+public class CakeDetailArrayAdapter extends ArrayAdapter<CakeDetail> {
     private Activity activity;
-    private ArrayList<RecipeDetail> listDetails;
+    private ArrayList<CakeDetail> listDetails;
     private static LayoutInflater inflater = null;
-    private IngredientDBHelper ingredientDBHelper = IngredientDBHelper.getInstance(activity);
-    private RecipeDetailDBHelper detailDBHelper = RecipeDetailDBHelper.getInstance(activity);
+    private RecipeDBHelper recipeDBHelper = RecipeDBHelper.getInstance(activity);
+    private CakeDetailDBHelper detailDBHelper = CakeDetailDBHelper.getInstance(activity);
 
-    public RecipeDetailArrayAdapter (Activity activity, int textViewResourceId,ArrayList<RecipeDetail> details) {
+    public CakeDetailArrayAdapter(Activity activity, int textViewResourceId, ArrayList<CakeDetail> details) {
         super(activity, textViewResourceId, details);
         try {
             this.activity = activity;
@@ -59,24 +59,24 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
 
         try {
             if (convertView == null) {
-                vi = inflater.inflate(R.layout.view_recipe_detail, null);
+                vi = inflater.inflate(R.layout.view_cake_detail, null);
                 holder = new ViewHolder();
 
-                holder.display_name = (TextView) vi.findViewById(R.id.textRecipeIngredient);
-                holder.display_number = (TextView) vi.findViewById(R.id.textIngredientQty);
+                holder.display_name = (TextView) vi.findViewById(R.id.textCakeRecipe);
+                holder.display_number = (TextView) vi.findViewById(R.id.textRecipeQty);
 
                 holder.display_number.setInputType(Configuration.KEYBOARD_12KEY);
                 holder.display_number.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 holder.display_number.setSelectAllOnFocus(true);
-                holder.display_number.setOnEditorActionListener(new RecipeDetailEditorActionListener(holder.display_number, listDetails, position, detailDBHelper));
+                holder.display_number.setOnEditorActionListener(new CakeDetailEditorActionListener(holder.display_number, listDetails, position, detailDBHelper));
                 vi.setTag(holder);
             } else {
                 holder = (ViewHolder) vi.getTag();
             }
 
-            Ingredient ing = ingredientDBHelper.getIngredient(listDetails.get(position).getIngredientId());
+            Recipe recipe = recipeDBHelper.getRecipe(listDetails.get(position).getRecipeId());
 
-            holder.display_name.setText(ing.getName());
+            holder.display_name.setText(recipe.getName());
             holder.display_number.setText(Double.toString(listDetails.get(position).getQuantity()));
 
 
