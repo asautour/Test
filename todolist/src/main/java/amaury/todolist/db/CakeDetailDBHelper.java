@@ -48,10 +48,10 @@ public class CakeDetailDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqlDB) {
         String sqlQuery = "CREATE TABLE " + TABLE_CAKE_DETAILS + "("
-                + KEY_ID                + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + KEY_CAKE_ID + " INTEGER, "
+                + KEY_ID        + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                + KEY_CAKE_ID   + " INTEGER, "
                 + KEY_RECIPE_ID + " INTEGER, "
-                + KEY_QUANTITY          + " DOUBLE )";
+                + KEY_QUANTITY  + " DOUBLE )";
 
         Log.d("CakeDetailDBHelper", "Query to form table: " + sqlQuery);
         sqlDB.execSQL(sqlQuery);
@@ -79,7 +79,7 @@ public class CakeDetailDBHelper extends SQLiteOpenHelper {
                 new String[] { String.valueOf(detail.getId()) });
     }
 
-    public void addCakeDetailToDb(CakeDetail detail, Boolean bCheckExist) {
+    public void addDetailToDb(CakeDetail detail, Boolean bCheckExist) {
         if ( bCheckExist ) {
             // select * from
             SQLiteDatabase sqlDB = getReadableDatabase();
@@ -94,18 +94,18 @@ public class CakeDetailDBHelper extends SQLiteOpenHelper {
             Cursor cursor = sqlDB.rawQuery(sqlQuery, null);
 
             if (cursor == null || !cursor.moveToFirst()) {
-                addCakeDetailToDb(detail);
+                addDetailToDb(detail);
             }
 
         }
         else
-            addCakeDetailToDb(detail);
+            addDetailToDb(detail);
     }
 
     /* ---------------------------------------------------------------------------------------------
 
     --------------------------------------------------------------------------------------------- */
-    private void addCakeDetailToDb(CakeDetail detail) {
+    private void addDetailToDb(CakeDetail detail) {
         SQLiteDatabase db = getWritableDatabase();
 
         db.beginTransaction();
@@ -113,7 +113,7 @@ public class CakeDetailDBHelper extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.clear();
 
-            values.put(CakeDetailDBHelper.KEY_CAKE_ID, detail.getRecipeId());
+            values.put(CakeDetailDBHelper.KEY_CAKE_ID, detail.getCakeId());
             values.put(CakeDetailDBHelper.KEY_RECIPE_ID, detail.getRecipeId());
             values.put(CakeDetailDBHelper.KEY_QUANTITY, detail.getQuantity());
 
@@ -149,9 +149,9 @@ public class CakeDetailDBHelper extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 CakeDetail detail = new CakeDetail();
-                detail.setCakeId(Integer.parseInt(cursor.getString(0)));
-                detail.setRecipeId(Integer.parseInt(cursor.getString(1)));
-                detail.setQuantity(Double.parseDouble(cursor.getString(2)));
+                detail.setCakeId(Integer.parseInt(cursor.getString(1)));
+                detail.setRecipeId(Integer.parseInt(cursor.getString(2)));
+                detail.setQuantity(Double.parseDouble(cursor.getString(3)));
 
                 // Adding recipe to list
                 details.add(detail);

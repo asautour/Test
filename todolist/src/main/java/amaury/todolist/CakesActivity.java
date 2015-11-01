@@ -142,5 +142,4 @@ public class CakesActivity extends AppCompatActivity {
         intent.putExtra(UiUtils.NAME, cake.getName());
         startActivity(intent);
     }
-
 }

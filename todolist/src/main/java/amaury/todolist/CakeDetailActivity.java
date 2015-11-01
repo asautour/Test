@@ -47,7 +47,7 @@ public class CakeDetailActivity extends AppCompatActivity implements AdapterView
 
         helper = CakeDBHelper.getInstance(CakeDetailActivity.this);
         helperDetail = CakeDetailDBHelper.getInstance(CakeDetailActivity.this);
-        helperRecipe = RecipeDBHelper.getInstance(this);
+        helperRecipe = RecipeDBHelper.getInstance(CakeDetailActivity.this);
 
         updateUI();
     }
@@ -82,7 +82,6 @@ public class CakeDetailActivity extends AppCompatActivity implements AdapterView
         final List<Recipe> listRecipes = helperRecipe.getAllRecipes();
 
         // populate IDs of all ingredients already in the recipe
-        Iterator<CakeDetail> it = listDetails.iterator();
         List<Integer> listId = new ArrayList<>();
         for ( int i=0; i<listDetails.size(); i++ ) {
             listId.add(listDetails.get(i).getRecipeId());
@@ -104,9 +103,9 @@ public class CakeDetailActivity extends AppCompatActivity implements AdapterView
             public void onClick(DialogInterface dialog, int id) {
                 for (int i=0; i<bool.length; i++) {
                     if ( bool[i] ) {
-                        // add ingredient to the recipe
+                        // add recipe to the cake
                         CakeDetail detail = new CakeDetail(cakeId,listRecipes.get(i).getId(),0);
-                        helperDetail.addCakeDetailToDb(detail, true);
+                        helperDetail.addDetailToDb(detail, true);
                     }
                     else
                         helperDetail.removeDetailFromDb(cakeId, listRecipes.get(i).getId());

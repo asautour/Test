@@ -29,11 +29,11 @@ import amaury.todolist.utils.UiUtils;
 
 public class RecipeDetailActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private int recipeId;
-    private static RecipeDetailDBHelper helperDetail;
     private static RecipeDBHelper helper;
-    private ArrayList<RecipeDetail> listDetails;
+    private static RecipeDetailDBHelper helperDetail;
+    private static IngredientDBHelper helperIngredient;
 
-    private IngredientDBHelper helperIngredient;
+    private ArrayList<RecipeDetail> listDetails;
     private EditText quantityField;
 
     @Override
@@ -82,7 +82,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
         final List<Ingredient> listIngredients = helperIngredient.getAllIngredients();
 
         // populate IDs of all ingredients already in the recipe
-        Iterator<RecipeDetail> it = listDetails.iterator();
         List<Integer> listId = new ArrayList<>();
         for ( int i=0; i<listDetails.size(); i++ ) {
             listId.add(listDetails.get(i).getIngredientId());

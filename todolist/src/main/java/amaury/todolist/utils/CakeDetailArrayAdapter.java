@@ -46,7 +46,7 @@ public class CakeDetailArrayAdapter extends ArrayAdapter<CakeDetail> {
         return listDetails.size();
     }
 
-    public static class ViewHolder {
+    public static class ViewHolder2 {
         public TextView display_name;
         public TextView display_number;
 
@@ -55,12 +55,12 @@ public class CakeDetailArrayAdapter extends ArrayAdapter<CakeDetail> {
     @Override
     public View getView(int position, final View convertView, ViewGroup parent) {
         View vi = convertView;
-        final ViewHolder holder;
+        final ViewHolder2 holder;
 
         try {
             if (convertView == null) {
                 vi = inflater.inflate(R.layout.view_cake_detail, null);
-                holder = new ViewHolder();
+                holder = new ViewHolder2();
 
                 holder.display_name = (TextView) vi.findViewById(R.id.textCakeRecipe);
                 holder.display_number = (TextView) vi.findViewById(R.id.textRecipeQty);
@@ -71,7 +71,7 @@ public class CakeDetailArrayAdapter extends ArrayAdapter<CakeDetail> {
                 holder.display_number.setOnEditorActionListener(new CakeDetailEditorActionListener(holder.display_number, listDetails, position, detailDBHelper));
                 vi.setTag(holder);
             } else {
-                holder = (ViewHolder) vi.getTag();
+                holder = (ViewHolder2) vi.getTag();
             }
 
             Recipe recipe = recipeDBHelper.getRecipe(listDetails.get(position).getRecipeId());

@@ -1,10 +1,5 @@
 package amaury.todolist.data;
 
-import android.content.Intent;
-import android.text.TextUtils;
-
-import java.util.Map;
-
 import amaury.todolist.utils.UnitUtils;
 
 public class RecipeDetail {
