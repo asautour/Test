@@ -155,7 +155,7 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(
                 TABLE_RECIPE_NAMES,
-                new String[] { KEY_ID },
+                new String[] { KEY_ID, KEY_NAME },
                 KEY_ID + "=?",
                 new String[] { String.valueOf(recipeId) },
                 null, null, null, null);

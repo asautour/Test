@@ -38,11 +38,11 @@ public class CakeDetailEditorActionListener implements EditText.OnEditorActionLi
             // retrieve quantity typed in by the user
             double quantity = Double.valueOf(view.getText().toString());
 
-            // remove focus from the current quantity cell
-            view.clearFocus();
-
             // from here update the recipe detail so the quantity is saved down
             updateDetail(quantity, position);
+
+            // remove focus from the current quantity cell
+            view.clearFocus();
 
             // consume
             return true;

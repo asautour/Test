@@ -28,6 +28,7 @@
         android:clickable="true"
         android:inputType="number"
         android:singleLine="true"
+        android:selectAllOnFocus="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
