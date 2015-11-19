@@ -38,14 +38,6 @@
                 android:value=".RecipesActivity" />
         </activity>
         <activity
-            android:name=".IngredientsPopupActivity"
-            android:label="@string/title_activity_ingredients_popup"
-            android:parentActivityName=".RecipeDetailActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".RecipeDetailActivity" />
-        </activity>
-        <activity
             android:name=".CakesActivity"
             android:label="@string/title_activity_cakes"
             android:parentActivityName=".HomeScreenActivity" >
