@@ -70,7 +70,7 @@ public class CakeDetailDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_CAKE_ID, detail.getRecipeId());
+        values.put(KEY_CAKE_ID, detail.getCakeId());
         values.put(KEY_RECIPE_ID, detail.getRecipeId());
         values.put(KEY_QUANTITY, detail.getQuantity());
 
