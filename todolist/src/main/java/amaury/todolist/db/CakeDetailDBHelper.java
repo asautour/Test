@@ -75,8 +75,11 @@ public class CakeDetailDBHelper extends SQLiteOpenHelper {
         values.put(KEY_QUANTITY, detail.getQuantity());
 
         // updating row
-        return db.update(TABLE_CAKE_DETAILS, values, KEY_ID + " = ?",
+        int result = db.update(TABLE_CAKE_DETAILS, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(detail.getId()) });
+        Log.d("CakeDetailDBHelper updateDetail ", String.valueOf(result));
+
+        return result;
     }
 
     public void addDetailToDb(CakeDetail detail, Boolean bCheckExist) {
@@ -149,6 +152,7 @@ public class CakeDetailDBHelper extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 CakeDetail detail = new CakeDetail();
+                detail.setId(Integer.parseInt(cursor.getString(0)));
                 detail.setCakeId(Integer.parseInt(cursor.getString(1)));
                 detail.setRecipeId(Integer.parseInt(cursor.getString(2)));
                 detail.setQuantity(Double.parseDouble(cursor.getString(3)));
