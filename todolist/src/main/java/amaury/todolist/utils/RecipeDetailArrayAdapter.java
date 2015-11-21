@@ -27,12 +27,14 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
     private static LayoutInflater inflater = null;
     private IngredientDBHelper ingredientDBHelper = IngredientDBHelper.getInstance(activity);
     private RecipeDetailDBHelper detailDBHelper = RecipeDetailDBHelper.getInstance(activity);
+    private double ratio;
 
-    public RecipeDetailArrayAdapter (Activity activity, int textViewResourceId,ArrayList<RecipeDetail> details) {
+    public RecipeDetailArrayAdapter(Activity activity, int textViewResourceId, ArrayList<RecipeDetail> details, double ratio) {
         super(activity, textViewResourceId, details);
         try {
             this.activity = activity;
             this.listDetails = details;
+            this.ratio = ratio;
 
             inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -77,7 +79,7 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
             Ingredient ing = ingredientDBHelper.getIngredient(listDetails.get(position).getIngredientId());
 
             holder.display_name.setText(ing.getName());
-            holder.display_number.setText(Double.toString(listDetails.get(position).getQuantity()));
+            holder.display_number.setText(Double.toString(listDetails.get(position).getQuantity()/ratio));
 
 
         } catch (Exception e) {

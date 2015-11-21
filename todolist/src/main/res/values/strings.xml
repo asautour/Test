@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">TodoList</string>
+    <string name="app_name">Recipe Manager</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_home_screen">HomeScreen</string>
+    <string name="title_activity_home_screen">Recipe Manager</string>
     <string name="title_activity_recipes">RecipesActivity</string>
     <string name="title_activity_recipe_detail">RecipeDetailActivity</string>
     <string name="title_activity_ingredients_popup">IngredientsPopup</string>

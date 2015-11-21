@@ -17,7 +17,8 @@
         android:layout_toLeftOf="@+id/textRecipeQty"
         android:layout_alignBottom="@+id/textRecipeQty"
         android:gravity="center_vertical"
-        android:clickable="false" />
+        android:clickable="true"
+        android:onClick="onCakeRecipeClick"/>
 
     <EditText
         android:id="@+id/textRecipeQty"

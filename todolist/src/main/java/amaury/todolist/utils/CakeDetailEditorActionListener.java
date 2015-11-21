@@ -1,16 +1,23 @@
 package amaury.todolist.utils;
 
+import android.content.Intent;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import amaury.todolist.CakeDetailActivity;
+import amaury.todolist.R;
+import amaury.todolist.RecipeDetailActivity;
 import amaury.todolist.data.Cake;
 import amaury.todolist.data.CakeDetail;
+import amaury.todolist.data.Recipe;
 import amaury.todolist.data.RecipeDetail;
 import amaury.todolist.db.CakeDetailDBHelper;
+import amaury.todolist.db.RecipeDBHelper;
 import amaury.todolist.db.RecipeDetailDBHelper;
 
 /**
@@ -21,12 +28,15 @@ public class CakeDetailEditorActionListener implements EditText.OnEditorActionLi
     private ArrayList<CakeDetail> listDetails;
     private int position;
     private CakeDetailDBHelper detailDBHelper;
+    private static RecipeDBHelper recipeDBHelper;
 
     public CakeDetailEditorActionListener(TextView view, ArrayList<CakeDetail> listDetails, int position, CakeDetailDBHelper detailDBHelper) {
         this.view = view;
         this.listDetails = listDetails;
         this.position = position;
         this.detailDBHelper = detailDBHelper;
+
+        recipeDBHelper = RecipeDBHelper.getInstance(view.getContext());
     }
 
     @Override

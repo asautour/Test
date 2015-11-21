@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,6 +24,7 @@ import amaury.todolist.data.RecipeDetail;
 import amaury.todolist.db.CakeDBHelper;
 import amaury.todolist.db.CakeDetailDBHelper;
 import amaury.todolist.db.RecipeDBHelper;
+import amaury.todolist.db.RecipeDetailDBHelper;
 import amaury.todolist.utils.CakeDetailArrayAdapter;
 import amaury.todolist.utils.RecipeDetailArrayAdapter;
 import amaury.todolist.utils.UiUtils;
@@ -149,5 +151,23 @@ public class CakeDetailActivity extends AppCompatActivity implements AdapterView
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         CakeDetail detail = listDetails.get(position);
 
+    }
+
+    /* ---------------------------------------------------------------------------------------------
+        On recipe click, the details screen is opened with the list of ingredients, associated
+        quantities and the relevant units.
+    --------------------------------------------------------------------------------------------- */
+    public void onCakeRecipeClick(View view) {
+        View v = (View) view.getParent();
+        TextView recipeName = (TextView) v.findViewById(R.id.textCakeRecipe);
+        TextView recipeQty = (TextView) v.findViewById(R.id.textRecipeQty);
+
+        // Parameter to build the detailed view is the recipe's ID.
+        Recipe recipe = helperRecipe.getRecipe(recipeName.getText().toString());
+        Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
+        intent.putExtra(RecipeDetailDBHelper.KEY_RECIPE_ID, recipe.getId());
+        intent.putExtra(UiUtils.NAME, recipe.getName());
+        intent.putExtra(UiUtils.QUANTITY, Double.parseDouble(recipeQty.getText().toString()));
+        startActivity(intent);
     }
 }

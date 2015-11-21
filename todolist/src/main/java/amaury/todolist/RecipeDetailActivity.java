@@ -35,6 +35,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
 
     private ArrayList<RecipeDetail> listDetails;
     private EditText quantityField;
+    private double totalQuantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,10 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
         Intent intent = getIntent();
         setTitle(intent.getStringExtra(UiUtils.NAME));
         this.recipeId = intent.getIntExtra(RecipeDetailDBHelper.KEY_RECIPE_ID, 1);
+
+        // if the screen is launched with a quantity in parameter, it means we are coming from the
+        // cake screen, i.e. targeting a total recipe weight
+        this.totalQuantity = intent.getDoubleExtra(UiUtils.QUANTITY,1);
 
         helper = RecipeDBHelper.getInstance(RecipeDetailActivity.this);
         helperDetail = RecipeDetailDBHelper.getInstance(RecipeDetailActivity.this);
@@ -138,7 +143,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
     --------------------------------------------------------------------------------------------- */
     private void updateUI() {
         listDetails = helperDetail.getRecipeDetails(recipeId);
-        ListAdapter adapter = new RecipeDetailArrayAdapter(this, 0, listDetails);
+        ListAdapter adapter = new RecipeDetailArrayAdapter(this, 0, listDetails, getRatio());
 
         // Display the list view
         ListView listView = (ListView) findViewById(R.id.listview);
@@ -148,6 +153,27 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         RecipeDetail detail = listDetails.get(position);
+    }
 
+    /* ---------------------------------------------------------------------------------------------
+        Returns the recipe's base weight, as entered by the user
+    --------------------------------------------------------------------------------------------- */
+    public double getBaseWeight() {
+        double weight = 0;
+
+        for (int i=0; i<listDetails.size(); i++) {
+            RecipeDetail detail = listDetails.get(i);
+            weight += detail.getQuantity();
+        }
+
+        return Math.max(1, weight);
+    }
+
+    /* ---------------------------------------------------------------------------------------------
+        This will be used to adjust the ingredients quantities for the total target weight, and
+        is simply a ratio from the total target weight and the recipe's base weight
+    --------------------------------------------------------------------------------------------- */
+    private double getRatio() {
+        return totalQuantity / getBaseWeight();
     }
 }

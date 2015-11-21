@@ -16,4 +16,5 @@ public class UiUtils {
     public static final String CANCEL                       = "Cancel";
     public static final String NAME                         = "Name";
     public static final String OK                           = "Ok";
+    public static final String QUANTITY                     = "Quantity";
 }
