@@ -69,6 +69,7 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
 
                 holder.display_number.setInputType(Configuration.KEYBOARD_12KEY);
                 holder.display_number.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                holder.display_number.setMaxLines(1);
                 holder.display_number.setSelectAllOnFocus(true);
                 holder.display_number.setOnEditorActionListener(new RecipeDetailEditorActionListener(holder.display_number, listDetails, position, detailDBHelper));
                 vi.setTag(holder);
@@ -79,7 +80,8 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
             Ingredient ing = ingredientDBHelper.getIngredient(listDetails.get(position).getIngredientId());
 
             holder.display_name.setText(ing.getName());
-            holder.display_number.setText(Double.toString(listDetails.get(position).getQuantity()/ratio));
+            String quantity = String.format("%.1f", listDetails.get(position).getQuantity()*ratio);
+            holder.display_number.setText(quantity);
 
 
         } catch (Exception e) {
