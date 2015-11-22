@@ -80,6 +80,8 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
             Ingredient ing = ingredientDBHelper.getIngredient(listDetails.get(position).getIngredientId());
 
             holder.display_name.setText(ing.getName());
+
+            // rounding quantity to one decimal
             String quantity = String.format("%.1f", listDetails.get(position).getQuantity()*ratio);
             holder.display_number.setText(quantity);
 

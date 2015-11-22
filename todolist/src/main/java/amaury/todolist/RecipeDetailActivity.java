@@ -174,6 +174,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
         is simply a ratio from the total target weight and the recipe's base weight
     --------------------------------------------------------------------------------------------- */
     private double getRatio() {
-        return totalQuantity / getBaseWeight();
+        if (totalQuantity==1)
+            return totalQuantity;
+        else
+            return totalQuantity / getBaseWeight();
     }
 }
