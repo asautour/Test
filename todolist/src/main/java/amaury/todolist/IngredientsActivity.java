@@ -20,6 +20,8 @@ import amaury.todolist.utils.IngredientUtils;
 import amaury.todolist.utils.UiUtils;
 
 public class IngredientsActivity extends AppCompatActivity {
+    private final int REMOVE_ALL_INGREDIENTS = 1;
+    private final int ADD_DEFAULT_INGREDIENTS = 2;
     private IngredientDBHelper helper;
     private ListAdapter listAdapter;
 
@@ -48,47 +50,37 @@ public class IngredientsActivity extends AppCompatActivity {
                 showPopupAdd();
                 return true;
             case R.id.sub_menu_add_default:
-                showPopupAddDefaultIngredients();
+                showPopup(ADD_DEFAULT_INGREDIENTS);
                 return true;
             case R.id.sub_menu_remove_all:
-                showPopupRemoveIngredients();
+                showPopup(REMOVE_ALL_INGREDIENTS);
             default:
                 return false;
         }
     }
 
-    private void showPopupRemoveIngredients() {
+    private void showPopup(final int actionId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(UiUtils.TITLE_POPUP_REMOVE_ALL_ING);
+        String title = "";
+
+        switch (actionId) {
+            case REMOVE_ALL_INGREDIENTS:
+                title = UiUtils.TITLE_POPUP_REMOVE_ALL_ING; break;
+            case ADD_DEFAULT_INGREDIENTS:
+                title = UiUtils.TITLE_POPUP_ADD_DEFAULT; break;
+            default: break;
+        }
+        builder.setTitle(title);
 
         // when click on "Add", add ingredient to the INGREDIENT table
         builder.setPositiveButton(UiUtils.OK, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // remove all ingredients
-                helper.deleteAllIngredients();
-                updateUI();
-            }
-        });
-
-        builder.setNegativeButton(UiUtils.CANCEL, null);
-        builder.create().show();
-    }
-
-
-    /* ---------------------------------------------------------------------------------------------
-        Gives ability to add a list of default ingredients
-    --------------------------------------------------------------------------------------------- */
-    private void showPopupAddDefaultIngredients() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(UiUtils.TITLE_POPUP_ADD_DEFAULT);
-
-        // when click on "Add", add ingredient to the INGREDIENT table
-        builder.setPositiveButton(UiUtils.ADD, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // add default ingredients
-                helper.addIngredientsToDb(IngredientUtils.defaultIngredients);
+                if (actionId==REMOVE_ALL_INGREDIENTS)
+                    helper.deleteAllIngredients();
+                else if (actionId==ADD_DEFAULT_INGREDIENTS)
+                    helper.addIngredientsToDb(IngredientUtils.defaultIngredients);
                 updateUI();
             }
         });
