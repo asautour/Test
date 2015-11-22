@@ -55,7 +55,7 @@
         </activity>
         <activity
             android:name=".StartBakingActivity"
-            android:label="@string/title_activity_cakes"
+            android:label="@string/title_activity_start_baking"
             android:parentActivityName=".HomeScreenActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

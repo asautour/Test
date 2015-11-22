@@ -14,7 +14,7 @@ public class StartBakingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_list);
+        setContentView(R.layout.view_start_baking);
         setTitle(UiUtils.TITLE_ACTIVITY_START_BAKING);
     }
 
