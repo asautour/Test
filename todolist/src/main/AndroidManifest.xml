@@ -43,7 +43,7 @@
             android:parentActivityName=".HomeScreenActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="amaury.todolist.HomeScreenActivity" />
+                android:value=".HomeScreenActivity" />
         </activity>
         <activity
             android:name=".CakeDetailActivity"
@@ -52,6 +52,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CakesActivity" />
+        </activity>
+        <activity
+            android:name=".StartBakingActivity"
+            android:label="@string/title_activity_cakes"
+            android:parentActivityName=".HomeScreenActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HomeScreenActivity" />
         </activity>
     </application>
 

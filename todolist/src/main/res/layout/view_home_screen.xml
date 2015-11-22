@@ -4,7 +4,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="amaury.todolist.HomeScreenActivity">
+    tools:context="amaury.todolist.HomeScreenActivity"
+    android:clickable="true">
 
 
     <Button
@@ -19,24 +20,36 @@
         android:onClick="buttonOnClick" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Recipes"
         android:id="@+id/buttonRecipes"
         android:layout_below="@+id/buttonIngredients"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/buttonIngredients"
         android:clickable="true"
         android:onClick="buttonOnClick" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Cakes"
         android:id="@+id/buttonCakes"
         android:layout_below="@+id/buttonRecipes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:clickable="true"
         android:onClick="buttonOnClick" />
+
+    <Button
+        android:text="Start baking"
+        android:id="@+id/buttonStartBaking"
+        android:layout_below="@+id/buttonCakes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="buttonOnClick"
+        android:layout_alignEnd="@+id/buttonCakes"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
