@@ -79,9 +79,7 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
     --------------------------------------------------------------------------------------------- */
     public void addIngredientToDb(String ingredientName) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
-
         values.clear();
         values.put(KEY_NAME, ingredientName);
 
@@ -90,6 +88,29 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
         Log.d("addIngredientToDb ", String.valueOf(result));
     }
 
+    /* ---------------------------------------------------------------------------------------------
+        Add ingredients from a list
+    --------------------------------------------------------------------------------------------- */
+    public void addIngredientsToDb(List<String> ingredientNames) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        db.beginTransaction();
+        try {
+            for (int i=0; i<ingredientNames.size(); i++) {
+                values.clear();
+                values.put(KEY_NAME, ingredientNames.get(i));
+
+                long result = db.insertWithOnConflict(TABLE_INGREDIENTS, null, values,
+                        SQLiteDatabase.CONFLICT_IGNORE);
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_INGREDIENTS, "Error while trying to add default ingredients");
+        } finally {
+            db.endTransaction();
+        }
+        db.close();
+    }
 
     /* ---------------------------------------------------------------------------------------------
 
@@ -182,6 +203,20 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
         } catch (Exception e) {
             Log.d(TABLE_INGREDIENTS, "Error while trying to delete an ingredient: " + name);
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public void deleteAllIngredients() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_INGREDIENTS,null,null);
+            Log.d("IngredientDBHelper", "Query to delete all from table: " + TABLE_INGREDIENTS);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_INGREDIENTS, "Error while trying to delete all ingredients: ");
         } finally {
             db.endTransaction();
         }

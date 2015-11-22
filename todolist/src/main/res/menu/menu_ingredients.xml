@@ -9,4 +9,15 @@
         android:icon="@android:drawable/ic_menu_add"
         android:title="Add ingredient" />
 
+    <item android:id="@+id/action_ingredients_settings"
+        yourapp:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Settings">
+        <menu>
+            <item android:id="@+id/sub_menu_add_default"
+                android:title="Add default ingredients" />
+            <item android:id="@+id/sub_menu_remove_all"
+                android:title="Remove all" />
+        </menu>
+    </item>
 </menu>
