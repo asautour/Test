@@ -15,6 +15,7 @@
         android:textSize="20dp"
         android:longClickable="true"
         android:clickable="true"
+        android:editable="true"
         android:layout_toLeftOf="@+id/removeCakeButton"
         android:layout_alignBottom="@+id/removeCakeButton"
         android:gravity="center_vertical"

@@ -14,10 +14,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textSize="20dp"
+        android:editable="true"
         android:layout_toLeftOf="@+id/textIngredientQty"
         android:layout_alignBottom="@+id/textIngredientQty"
         android:gravity="center_vertical"
-        android:clickable="false" />
+        android:clickable="true" />
 
     <EditText
         android:id="@+id/textIngredientQty"

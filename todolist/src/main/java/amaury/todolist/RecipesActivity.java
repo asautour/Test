@@ -106,15 +106,13 @@ public class RecipesActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(listAdapter);
 
-        // TODO update code on recipe long click action
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int pos, long id) {
-            Log.v("long clicked", "pos: " + pos);
-            return true;
+        /*TextView textView = (TextView) findViewById(R.id.recipeTextView);
+        textView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
             }
-        });
+        });*/
     }
 
     /* ---------------------------------------------------------------------------------------------

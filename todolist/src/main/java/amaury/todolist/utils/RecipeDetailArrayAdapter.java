@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -29,7 +31,8 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
     private RecipeDetailDBHelper detailDBHelper = RecipeDetailDBHelper.getInstance(activity);
     private double ratio;
 
-    public RecipeDetailArrayAdapter(Activity activity, int textViewResourceId, ArrayList<RecipeDetail> details, double ratio) {
+    public RecipeDetailArrayAdapter(Activity activity, int textViewResourceId,
+                                    ArrayList<RecipeDetail> details, double ratio) {
         super(activity, textViewResourceId, details);
         try {
             this.activity = activity;
@@ -65,13 +68,16 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
                 holder = new ViewHolder();
 
                 holder.display_name = (TextView) vi.findViewById(R.id.textRecipeIngredient);
-                holder.display_number = (TextView) vi.findViewById(R.id.textIngredientQty);
 
+                holder.display_number = (TextView) vi.findViewById(R.id.textIngredientQty);
                 holder.display_number.setInputType(Configuration.KEYBOARD_12KEY);
                 holder.display_number.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 holder.display_number.setMaxLines(1);
                 holder.display_number.setSelectAllOnFocus(true);
-                holder.display_number.setOnEditorActionListener(new RecipeDetailEditorActionListener(holder.display_number, listDetails, position, detailDBHelper));
+                holder.display_number.requestFocus();
+                holder.display_number.setOnEditorActionListener(
+                        new RecipeDetailEditorActionListener(holder.display_number, listDetails,
+                                position, detailDBHelper));
                 vi.setTag(holder);
             } else {
                 holder = (ViewHolder) vi.getTag();

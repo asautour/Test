@@ -41,9 +41,7 @@ public class CakeDetailEditorActionListener implements EditText.OnEditorActionLi
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_DONE ||
-                event.getAction() == KeyEvent.ACTION_DOWN &&
-                        event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+        if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
 
             // retrieve quantity typed in by the user
             double quantity = Double.valueOf(view.getText().toString());

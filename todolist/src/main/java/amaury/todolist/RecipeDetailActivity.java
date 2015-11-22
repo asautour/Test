@@ -34,7 +34,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
     private static IngredientDBHelper helperIngredient;
 
     private ArrayList<RecipeDetail> listDetails;
-    private EditText quantityField;
     private double totalQuantity;
 
     @Override
@@ -109,11 +108,16 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
                 for (int i=0; i<bool.length; i++) {
                     if ( bool[i] ) {
                         // add ingredient to the recipe
-                        RecipeDetail detail = new RecipeDetail(recipeId,listIngredients.get(i).getId(),0, null);
+                        RecipeDetail detail = new RecipeDetail(
+                                recipeId,
+                                listIngredients.get(i).getId(),
+                                0,
+                                null);
                         helperDetail.addRecipeDetailToDb(detail, true);
                     }
                     else
-                        helperDetail.removeRecipeDetailFromDb(recipeId, listIngredients.get(i).getId());
+                        helperDetail.removeRecipeDetailFromDb(recipeId,
+                                listIngredients.get(i).getId());
                 }
 
                 updateUI();
@@ -156,7 +160,8 @@ public class RecipeDetailActivity extends AppCompatActivity implements AdapterVi
     }
 
     /* ---------------------------------------------------------------------------------------------
-        Returns the recipe's base weight, as entered by the user
+        Returns the recipe's base weight (sum of all ingredients' weight), as entered in the
+        recipe screen
     --------------------------------------------------------------------------------------------- */
     public double getBaseWeight() {
         double weight = 0;
