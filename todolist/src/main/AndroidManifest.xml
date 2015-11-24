@@ -61,6 +61,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeScreenActivity" />
         </activity>
+        <activity
+            android:name=".BakingDetailActivity"
+            android:label="@string/title_activity_start_baking"
+            android:parentActivityName=".StartBakingActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".StartBakingActivity" />
+        </activity>
     </application>
 
 </manifest>

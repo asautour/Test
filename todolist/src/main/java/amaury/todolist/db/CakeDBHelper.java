@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import amaury.todolist.data.Cake;
+import amaury.todolist.data.Recipe;
 
 public class CakeDBHelper extends SQLiteOpenHelper {
     public static final String TABLE_CAKE_NAMES     = "cakes";
@@ -77,9 +78,9 @@ public class CakeDBHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(
                 TABLE_CAKE_NAMES,
-                new String[] { KEY_ID, KEY_NAME },
+                new String[]{KEY_ID, KEY_NAME},
                 KEY_NAME + "=?",
-                new String[] { String.valueOf(name) },
+                new String[]{String.valueOf(name)},
                 null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -145,5 +146,22 @@ public class CakeDBHelper extends SQLiteOpenHelper {
             db.endTransaction();
         }
         db.close();
+    }
+
+    public Cake getCake(int cakeId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                TABLE_CAKE_NAMES,
+                new String[] { KEY_ID, KEY_NAME },
+                KEY_ID + "=?",
+                new String[] { String.valueOf(cakeId) },
+                null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            return new Cake(Integer.parseInt(cursor.getString(0)), cursor.getString(1));
+        }
+        else
+            return null;
     }
 }

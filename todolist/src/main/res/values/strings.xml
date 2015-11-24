@@ -10,4 +10,5 @@
     <string name="title_activity_cakes">My cakes</string>
     <string name="title_activity_cake_detail">CakeDetailActivity</string>
     <string name="title_activity_start_baking">StartBakingActivity</string>
+    <string name="title_activity_baking_detail">BakingDetailActivity</string>
 </resources>

@@ -11,6 +11,7 @@ public class UiUtils {
     public static final String TITLE_ACTIVITY_CAKES             = "My cakes";
     public static final String TITLE_ACTIVITY_CAKE_DETAILS      = "Select recipes";
     public static final String TITLE_ACTIVITY_START_BAKING      = "Start baking";
+    public static final String TITLE_ACTIVITY_SELECT_CAKES      = "Select cakes";
 
     public static final String TITLE_POPUP_ADD_INGREDIENT   = "Add an ingredient";
     public static final String TITLE_POPUP_ADD_DEFAULT      = "Add default ingredients?";
