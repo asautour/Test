@@ -23,13 +23,14 @@ public class BakingDetailEditorActionListener implements EditText.OnEditorAction
     private static CakeDBHelper cakeDBHelper;
 
     public BakingDetailEditorActionListener(TextView view, ArrayList<BakingDetail> listDetails,
-                                            int position, BakingDetailDBHelper helper) {
+                                            int position,
+                                            BakingDetailDBHelper helper,
+                                            CakeDBHelper cakeDBHelper) {
         this.view = view;
         this.listDetails = listDetails;
         this.position = position;
         this.bakingDBHelper = helper;
-
-        //cakeDBHelper = BakingDetailDBHelper.getInstance(view.getContext());
+        this.cakeDBHelper = cakeDBHelper;
     }
 
     @Override
@@ -54,6 +55,7 @@ public class BakingDetailEditorActionListener implements EditText.OnEditorAction
     }
 
     protected void updateDetail(double quantity, int position) {
+        //BakingDetail detail =
         /*CakeDetail detail = listDetails.get(position);
         detail.setQuantity(quantity);
 

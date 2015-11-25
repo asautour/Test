@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="schemas.android.com/tools"
+    tools:context="amaury.todolist.BakingDetailActivity"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
+
+    <item android:id="@+id/action_select_cakes_settings"
+        yourapp:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Settings">
+        <menu>
+            <item android:id="@+id/sub_menu_clear_all"
+                android:title="Clear all" />
+        </menu>
+    </item>
+</menu>
