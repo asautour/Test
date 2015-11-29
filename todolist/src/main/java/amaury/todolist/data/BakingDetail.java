@@ -18,7 +18,6 @@ public class BakingDetail {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -26,7 +25,6 @@ public class BakingDetail {
     public int getCakeId() {
         return cakeId;
     }
-
     public void setCakeId(int cakeId) {
         this.cakeId = cakeId;
     }
@@ -34,7 +32,6 @@ public class BakingDetail {
     public int getQuantity() {
         return quantity;
     }
-
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }

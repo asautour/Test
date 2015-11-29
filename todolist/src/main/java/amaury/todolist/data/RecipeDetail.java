@@ -26,7 +26,6 @@ public class RecipeDetail {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -34,7 +33,6 @@ public class RecipeDetail {
     public int getRecipeId() {
         return recipeId;
     }
-
     public void setRecipeId(int recipeId) {
         this.recipeId = recipeId;
     }
@@ -42,7 +40,6 @@ public class RecipeDetail {
     public int getIngredientId() {
         return ingredientId;
     }
-
     public void setIngredientId(int ingredientId) {
         this.ingredientId = ingredientId;
     }
@@ -50,7 +47,6 @@ public class RecipeDetail {
     public double getQuantity() {
         return quantity;
     }
-
     public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
@@ -58,7 +54,6 @@ public class RecipeDetail {
     public String getUnit() {
         return unit;
     }
-
     public void setUnit(String unit) {
         this.unit = unit;
     }
