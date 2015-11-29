@@ -79,8 +79,24 @@ public class BakingDetailArrayAdapter extends ArrayAdapter<BakingDetail> {
                 holder = (ViewHolder) vi.getTag();
             }
 
-            holder.display_name.setText(listCakes.get(position).getName());
-            holder.display_number.setText("0");//Double.toString(listDetails.get(position).getQuantity()));
+            Cake cake = listCakes.get(position);
+            holder.display_name.setText(cake.getName());
+            BakingDetail bakingDetail = null;
+
+            for (BakingDetail detail : listDetails) {
+                if (detail.getCakeId() == cake.getId()) {
+                    bakingDetail = detail;
+                    break;
+                }
+            }
+
+            // if the list of details contain an entry for the current line, set value
+            if ( bakingDetail != null) {
+                holder.display_number.setText(Integer.toString(bakingDetail.getQuantity()));
+            }
+            // otherwise value would be 0
+            else
+                holder.display_number.setText("0");
 
 
         } catch (Exception e) {

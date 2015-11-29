@@ -6,8 +6,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import amaury.todolist.data.BakingDetail;
+import amaury.todolist.data.Cake;
 import amaury.todolist.data.CakeDetail;
 import amaury.todolist.db.BakingDetailDBHelper;
 import amaury.todolist.db.CakeDBHelper;
@@ -21,6 +23,7 @@ public class BakingDetailEditorActionListener implements EditText.OnEditorAction
     private int position;
     private static BakingDetailDBHelper bakingDBHelper;
     private static CakeDBHelper cakeDBHelper;
+    private List<Cake> listCakes;
 
     public BakingDetailEditorActionListener(TextView view, ArrayList<BakingDetail> listDetails,
                                             int position,
@@ -31,6 +34,8 @@ public class BakingDetailEditorActionListener implements EditText.OnEditorAction
         this.position = position;
         this.bakingDBHelper = helper;
         this.cakeDBHelper = cakeDBHelper;
+
+        listCakes = cakeDBHelper.getAllCakes();
     }
 
     @Override
@@ -40,7 +45,7 @@ public class BakingDetailEditorActionListener implements EditText.OnEditorAction
                         event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
 
             // retrieve quantity typed in by the user
-            double quantity = Double.valueOf(view.getText().toString());
+            int quantity = Integer.valueOf(view.getText().toString());
 
             // from here update the recipe detail so the quantity is saved down
             updateDetail(quantity, position);
@@ -54,12 +59,26 @@ public class BakingDetailEditorActionListener implements EditText.OnEditorAction
         return false; // pass on to other listeners.}
     }
 
-    protected void updateDetail(double quantity, int position) {
-        //BakingDetail detail =
-        /*CakeDetail detail = listDetails.get(position);
-        detail.setQuantity(quantity);
+    protected void updateDetail(int quantity, int position) {
+        Cake cake = listCakes.get(position);
+        BakingDetail myDetail = null;
 
-        // save down quantity to database
-        detailDBHelper.updateDetail(detail);*/
+        for (BakingDetail detail : listDetails) {
+            if ( detail.getCakeId() == cake.getId() ) {
+                myDetail = detail;
+                break;
+            }
+        }
+
+        if (myDetail!=null) {
+            myDetail.setQuantity(quantity);
+            bakingDBHelper.updateDetail(myDetail);
+        }
+        else {
+            myDetail = new BakingDetail();
+            myDetail.setQuantity(quantity);
+            myDetail.setCakeId(cake.getId());
+            bakingDBHelper.addDetailToDb(myDetail, false);
+        }
     }
 }
