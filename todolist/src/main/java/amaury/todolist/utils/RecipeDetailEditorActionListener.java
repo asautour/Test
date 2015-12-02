@@ -1,12 +1,9 @@
 package amaury.todolist.utils;
 
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -17,13 +14,11 @@ import amaury.todolist.db.RecipeDetailDBHelper;
  * Created by su on 17/10/2015.
  */
 public class RecipeDetailEditorActionListener implements EditText.OnEditorActionListener {
-    private TextView view;
     private ArrayList<RecipeDetail> listDetails;
     private int position;
     private RecipeDetailDBHelper detailDBHelper;
 
-    public RecipeDetailEditorActionListener(TextView view, ArrayList<RecipeDetail> listDetails, int position, RecipeDetailDBHelper detailDBHelper) {
-        this.view = view;
+    public RecipeDetailEditorActionListener(ArrayList<RecipeDetail> listDetails, int position, RecipeDetailDBHelper detailDBHelper) {
         this.listDetails = listDetails;
         this.position = position;
         this.detailDBHelper = detailDBHelper;

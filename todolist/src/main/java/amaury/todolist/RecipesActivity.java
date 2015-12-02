@@ -7,11 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -27,8 +25,7 @@ import amaury.todolist.utils.UiUtils;
 
 ************************************************************************************************* */
 public class RecipesActivity extends AppCompatActivity {
-
-    private static RecipeDBHelper helper;
+    private static RecipeDBHelper helperRecipe;
     private ListAdapter listAdapter;
 
     @Override
@@ -36,7 +33,7 @@ public class RecipesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_list);
         setTitle(UiUtils.TITLE_ACTIVITY_RECIPES);
-        helper = RecipeDBHelper.getInstance(RecipesActivity.this);
+        helperRecipe = RecipeDBHelper.getInstance(RecipesActivity.this);
         updateUI();
     }
 
@@ -56,7 +53,6 @@ public class RecipesActivity extends AppCompatActivity {
             case R.id.action_add_recipe:
                 showPopupAdd();
                 return true;
-
             default:
                 return false;
         }
@@ -67,20 +63,20 @@ public class RecipesActivity extends AppCompatActivity {
     --------------------------------------------------------------------------------------------- */
     private void showPopupAdd() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add a recipe");
+        builder.setTitle(UiUtils.TITLE_POPUP_ADD_RECIPE);
         final EditText inputField = new EditText(this);
         builder.setView(inputField);
 
         // when click on "Add", add ingredient to the RECIPE_NAMES table
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(UiUtils.ADD, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-            helper.addRecipeToDb(inputField.getText().toString());
-            updateUI();
+                helperRecipe.addRecipeToDb(inputField.getText().toString());
+                updateUI();
             }
         });
 
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton(UiUtils.CANCEL, null);
         builder.create().show();
     }
 
@@ -88,7 +84,7 @@ public class RecipesActivity extends AppCompatActivity {
 
     --------------------------------------------------------------------------------------------- */
     private void updateUI() {
-        SQLiteDatabase sqlDB = helper.getReadableDatabase();
+        SQLiteDatabase sqlDB = helperRecipe.getReadableDatabase();
         Cursor cursor = sqlDB.query(RecipeDBHelper.TABLE_RECIPE_NAMES,
                 new String[]{RecipeDBHelper.KEY_ID, RecipeDBHelper.KEY_NAME},
                 null,null,null,null,null);
@@ -99,8 +95,7 @@ public class RecipesActivity extends AppCompatActivity {
                 cursor,
                 new String[]{RecipeDBHelper.KEY_NAME},
                 new int[]{R.id.recipeTextView},
-                0
-        );
+                0);
 
         // Display the list view
         ListView listView = (ListView) findViewById(R.id.listview);
@@ -121,7 +116,11 @@ public class RecipesActivity extends AppCompatActivity {
     public void onRemoveRecipeClick(View view) {
         View v = (View) view.getParent();
         TextView textView = (TextView) v.findViewById(R.id.recipeTextView);
-        helper.deleteRecipe(textView.getText().toString());
+
+        // delete recipe from db
+        helperRecipe.deleteRecipe(textView.getText().toString());
+
+        // then refresh display
         updateUI();
     }
 
@@ -134,7 +133,7 @@ public class RecipesActivity extends AppCompatActivity {
         TextView textView = (TextView) v.findViewById(R.id.recipeTextView);
 
         // Parameter to build the detailed view is the recipe's ID.
-        Recipe recipe = helper.getRecipe(textView.getText().toString());
+        Recipe recipe = helperRecipe.getRecipe(textView.getText().toString());
         Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
         intent.putExtra(RecipeDetailDBHelper.KEY_RECIPE_ID, recipe.getId());
         intent.putExtra(UiUtils.NAME, recipe.getName());

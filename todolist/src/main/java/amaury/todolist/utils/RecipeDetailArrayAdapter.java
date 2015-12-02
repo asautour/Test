@@ -76,7 +76,7 @@ public class RecipeDetailArrayAdapter extends ArrayAdapter<RecipeDetail> {
                 holder.display_number.setSelectAllOnFocus(true);
                 holder.display_number.requestFocus();
                 holder.display_number.setOnEditorActionListener(
-                        new RecipeDetailEditorActionListener(holder.display_number, listDetails,
+                        new RecipeDetailEditorActionListener(listDetails,
                                 position, detailDBHelper));
                 vi.setTag(holder);
             } else {

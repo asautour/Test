@@ -61,24 +61,26 @@ public class IngredientsActivity extends AppCompatActivity {
 
     private void showPopup(final int actionId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String title = "";
+        String title;
 
         switch (actionId) {
             case REMOVE_ALL_INGREDIENTS:
                 title = UiUtils.TITLE_POPUP_REMOVE_ALL_ING; break;
             case ADD_DEFAULT_INGREDIENTS:
                 title = UiUtils.TITLE_POPUP_ADD_DEFAULT; break;
-            default: break;
+            default:
+                title = ""; break;
         }
         builder.setTitle(title);
 
-        // when click on "Add", add ingredient to the INGREDIENT table
+        // when click on "OK", add ingredient to the INGREDIENT table
         builder.setPositiveButton(UiUtils.OK, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // remove all ingredients
                 if (actionId==REMOVE_ALL_INGREDIENTS)
                     helper.deleteAllIngredients();
+                // or add the default list of ingredients
                 else if (actionId==ADD_DEFAULT_INGREDIENTS)
                     helper.addIngredientsToDb(IngredientUtils.defaultIngredients);
                 updateUI();
@@ -133,7 +135,6 @@ public class IngredientsActivity extends AppCompatActivity {
         // Display the list view
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(listAdapter);
-
     }
 
     /* ---------------------------------------------------------------------------------------------
@@ -147,9 +148,5 @@ public class IngredientsActivity extends AppCompatActivity {
         // TODO on ingredient remove make sure all the relevant cleanup is done on recipe/db
 
         updateUI();
-    }
-
-    public void removeAllIngredients() {
-        helper.deleteAllIngredients();
     }
 }

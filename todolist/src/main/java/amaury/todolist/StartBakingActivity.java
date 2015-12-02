@@ -7,8 +7,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
-import amaury.todolist.data.Recipe;
-import amaury.todolist.db.RecipeDetailDBHelper;
 import amaury.todolist.utils.UiUtils;
 
 /**

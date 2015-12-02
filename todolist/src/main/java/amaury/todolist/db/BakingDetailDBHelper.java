@@ -45,7 +45,7 @@ public class BakingDetailDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqlDB) {
-        String sqlQuery = "CREATE TABLE " + TABLE_BAKING_DETAILS + "("
+        String sqlQuery = "CREATE TABLE IF NOT EXISTS " + TABLE_BAKING_DETAILS + "("
                 + KEY_ID        + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
                 + KEY_CAKE_ID   + " INTEGER, "
                 + KEY_QUANTITY  + " INTEGER )";

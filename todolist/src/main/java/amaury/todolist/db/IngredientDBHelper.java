@@ -36,7 +36,7 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqlDB) {
         String sqlQuery = String.format(
-                "CREATE TABLE %s (" +
+                "CREATE TABLE IF NOT EXISTS %s (" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "%s TEXT)",
                 TABLE_INGREDIENTS,
@@ -50,28 +50,6 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqlDB, int oldVersion, int newVersion) {
         sqlDB.execSQL("DROP TABLE IF EXISTS " + TABLE_INGREDIENTS);
         onCreate(sqlDB);
-    }
-
-    /* ---------------------------------------------------------------------------------------------
-
-    --------------------------------------------------------------------------------------------- */
-    void addIngredient(Ingredient ingredient) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        db.beginTransaction();
-        try {
-            ContentValues values = new ContentValues();
-            values.put(KEY_NAME, ingredient.getName()); // Contact Name
-
-            // Inserting Row
-            db.insert(TABLE_INGREDIENTS, null, values);
-            db.close(); // Closing database connection
-        } catch (Exception e) {
-            Log.d(TABLE_INGREDIENTS, "Error while trying to add post to database");
-        } finally {
-            db.endTransaction();
-        }
-        db.close();
     }
 
     /* ---------------------------------------------------------------------------------------------
@@ -102,6 +80,7 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
 
                 long result = db.insertWithOnConflict(TABLE_INGREDIENTS, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
+                Log.d(TABLE_INGREDIENTS, "Insert line, result " + result);
             }
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -156,39 +135,6 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
 
         // return ingredients list
         return ingredientList;
-    }
-
-    /* ---------------------------------------------------------------------------------------------
-
-    --------------------------------------------------------------------------------------------- */
-    public int updateIngredient(Ingredient ingredient) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(KEY_NAME, ingredient.getName());
-
-        // updating row
-        return db.update(TABLE_INGREDIENTS, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(ingredient.getId()) });
-    }
-
-    /* ---------------------------------------------------------------------------------------------
-
-    --------------------------------------------------------------------------------------------- */
-    public void deleteIngredient(Ingredient ingredient) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        db.beginTransaction();
-        try {
-            db.delete(TABLE_INGREDIENTS, KEY_ID + " = ?",
-                    new String[]{String.valueOf(ingredient.getId())});
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.d(TABLE_INGREDIENTS, "Error while trying to delete an ingredient");
-        } finally {
-            db.endTransaction();
-        }
-        db.close();
     }
 
     /* ---------------------------------------------------------------------------------------------

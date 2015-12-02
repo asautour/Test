@@ -39,7 +39,7 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqlDB) {
         String sqlQuery = String.format(
-                "CREATE TABLE %s (" +
+                "CREATE TABLE IF NOT EXISTS %s (" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "%s TEXT)",
                 TABLE_RECIPE_NAMES,

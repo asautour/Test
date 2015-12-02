@@ -47,7 +47,7 @@ public class CakeDetailDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqlDB) {
-        String sqlQuery = "CREATE TABLE " + TABLE_CAKE_DETAILS + "("
+        String sqlQuery = "CREATE TABLE IF NOT EXISTS " + TABLE_CAKE_DETAILS + "("
                 + KEY_ID        + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
                 + KEY_CAKE_ID   + " INTEGER, "
                 + KEY_RECIPE_ID + " INTEGER, "

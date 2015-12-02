@@ -16,6 +16,7 @@ public class UiUtils {
     public static final String TITLE_POPUP_ADD_INGREDIENT   = "Add an ingredient";
     public static final String TITLE_POPUP_ADD_DEFAULT      = "Add default ingredients?";
     public static final String TITLE_POPUP_REMOVE_ALL_ING   = "Remove all ingredients?";
+    public static final String TITLE_POPUP_ADD_RECIPE       = "Add a recipe";
     public static final String ADD                          = "Add";
     public static final String CANCEL                       = "Cancel";
     public static final String NAME                         = "Name";
