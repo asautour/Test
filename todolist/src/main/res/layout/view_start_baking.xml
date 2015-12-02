@@ -16,5 +16,15 @@
         android:onClick="buttonOnSelectCakesClick"
         android:layout_alignParentEnd="true" />
 
+    <Button
+        android:text="Step 2: get busy!"
+        android:id="@+id/buttonGetBusy"
+        android:layout_below="@+id/buttonSelectCakes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:clickable="true"
+        android:onClick="buttonOnGetBusyClick"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
