@@ -1,18 +1,22 @@
 package amaury.todolist;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DebugUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import amaury.todolist.db.DBUtils;
+import amaury.todolist.utils.IngredientUtils;
 import amaury.todolist.utils.UiUtils;
 
 public class HomeScreenActivity extends AppCompatActivity {
-
+    private final int CLEAR_DB = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +64,38 @@ public class HomeScreenActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.sub_menu_clear_db:
+                showPopup(CLEAR_DB);
+                return true;
+            default:
+                return false;
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    private void showPopup(final int actionId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String title;
+
+        switch (actionId) {
+            case CLEAR_DB:
+                title = UiUtils.TITLE_ARE_YOU_SURE; break;
+            default:
+                title = ""; break;
+        }
+        builder.setTitle(title);
+
+        // when click on "OK", add ingredient to the INGREDIENT table
+        builder.setPositiveButton(UiUtils.OK, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // remove all ingredients
+                if (actionId==CLEAR_DB)
+                    DBUtils.clearDb(getBaseContext());
+            }
+        });
+
+        builder.setNegativeButton(UiUtils.CANCEL, null);
+        builder.create().show();
     }
 }
