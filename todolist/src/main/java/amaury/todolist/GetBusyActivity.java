@@ -1,11 +1,14 @@
 package amaury.todolist;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +22,9 @@ import amaury.todolist.db.BakingDetailDBHelper;
 import amaury.todolist.db.CakeDBHelper;
 import amaury.todolist.db.CakeDetailDBHelper;
 import amaury.todolist.db.RecipeDBHelper;
+import amaury.todolist.db.RecipeDetailDBHelper;
 import amaury.todolist.utils.CakeDetailArrayAdapter;
+import amaury.todolist.utils.UiUtils;
 
 public class GetBusyActivity extends AppCompatActivity {
     private static BakingDetailDBHelper helperBaking;
@@ -110,5 +115,23 @@ public class GetBusyActivity extends AppCompatActivity {
         // Display the list view
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(adapter);
+    }
+
+    /* ---------------------------------------------------------------------------------------------
+        On recipe click, the details screen is opened with the list of ingredients, associated
+        quantities and the relevant units.
+    --------------------------------------------------------------------------------------------- */
+    public void onCakeRecipeClick(View view) {
+        View v = (View) view.getParent();
+        TextView recipeName = (TextView) v.findViewById(R.id.textCakeRecipe);
+        TextView recipeQty = (TextView) v.findViewById(R.id.textRecipeQty);
+
+        // Parameter to build the detailed view is the recipe's ID.
+        Recipe recipe = helperRecipe.getRecipe(recipeName.getText().toString());
+        Intent intent = new Intent(getApplicationContext(), RecipeDetailActivity.class);
+        intent.putExtra(RecipeDetailDBHelper.KEY_RECIPE_ID, recipe.getId());
+        intent.putExtra(UiUtils.NAME, recipe.getName());
+        intent.putExtra(UiUtils.QUANTITY, Double.parseDouble(recipeQty.getText().toString()));
+        startActivity(intent);
     }
 }
