@@ -154,7 +154,7 @@ public class IngredientDBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteAllIngredients() {
+    public void clearDb() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         try {

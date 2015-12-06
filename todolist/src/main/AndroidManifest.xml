@@ -12,6 +12,7 @@
             android:label="@string/title_activity_home_screen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -68,6 +69,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".StartBakingActivity" />
+        </activity>
+        <activity
+            android:name=".GetBusyActivity"
+            android:label="@string/title_activity_get_busy"
+            android:parentActivityName=".StartBakingActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="amaury.todolist.StartBakingActivity" />
         </activity>
     </application>
 

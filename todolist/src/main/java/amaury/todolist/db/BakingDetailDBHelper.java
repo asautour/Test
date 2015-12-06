@@ -174,4 +174,18 @@ public class BakingDetailDBHelper extends SQLiteOpenHelper {
         }
         db.close();
     }
+
+    public void clearDb() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_BAKING_DETAILS,null,null);
+            Log.d("BakingDetailDBHelper", "Query to delete all from table: " + TABLE_BAKING_DETAILS);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_BAKING_DETAILS, "Error while trying to delete all baking details: ");
+        } finally {
+            db.endTransaction();
+        }
+    }
 }

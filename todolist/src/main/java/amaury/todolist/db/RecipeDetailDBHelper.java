@@ -190,4 +190,18 @@ public class RecipeDetailDBHelper extends SQLiteOpenHelper {
         }
         db.close();
     }
+
+    public void clearDb() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_RECIPE_DETAILS,null,null);
+            Log.d("RecipeDetailDBHelper", "Query to delete all from table: " + TABLE_RECIPE_DETAILS);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_RECIPE_DETAILS, "Error while trying to delete all recipe details: ");
+        } finally {
+            db.endTransaction();
+        }
+    }
 }

@@ -79,7 +79,7 @@ public class IngredientsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 // remove all ingredients
                 if (actionId==REMOVE_ALL_INGREDIENTS)
-                    helper.deleteAllIngredients();
+                    helper.clearDb();
                 // or add the default list of ingredients
                 else if (actionId==ADD_DEFAULT_INGREDIENTS)
                     helper.addIngredientsToDb(IngredientUtils.defaultIngredients);

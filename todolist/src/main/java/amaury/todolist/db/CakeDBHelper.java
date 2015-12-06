@@ -164,4 +164,18 @@ public class CakeDBHelper extends SQLiteOpenHelper {
         else
             return null;
     }
+
+    public void clearDb() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_CAKE_NAMES,null,null);
+            Log.d("CakeDBHelper", "Query to delete all from table: " + TABLE_CAKE_NAMES);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_CAKE_NAMES, "Error while trying to delete all cakes: ");
+        } finally {
+            db.endTransaction();
+        }
+    }
 }

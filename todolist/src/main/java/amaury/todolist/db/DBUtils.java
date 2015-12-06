@@ -10,7 +10,8 @@ public class DBUtils {
 
     public static final String DATABASE_NAME = "recipeManager";
     public static final int DATABASE_VERSION = 2;
-    public static final boolean DATABASE_RESET = true;
+    public static final boolean DATABASE_RESET = false;
+    public static final boolean DATABASE_INIT = true;
 
     public static void initiateDb(Context context) {
         IngredientDBHelper helperIngredient = IngredientDBHelper.getInstance(context);
@@ -36,6 +37,25 @@ public class DBUtils {
         BakingDetailDBHelper helperBakingDetail = BakingDetailDBHelper.getInstance(context);
         sqlDB = helperBakingDetail.getWritableDatabase();
         helperBakingDetail.onCreate(sqlDB);
+    }
 
+    public static void clearDb(Context context) {
+        IngredientDBHelper helperIngredient = IngredientDBHelper.getInstance(context);
+        helperIngredient.clearDb();
+
+        RecipeDBHelper helperRecipe = RecipeDBHelper.getInstance(context);
+        helperRecipe.clearDb();
+
+        RecipeDetailDBHelper helperDetail = RecipeDetailDBHelper.getInstance(context);
+        helperDetail.clearDb();
+
+        CakeDBHelper helperCake = CakeDBHelper.getInstance(context);
+        helperCake.clearDb();
+
+        CakeDetailDBHelper helperCakeDetail = CakeDetailDBHelper.getInstance(context);
+        helperCakeDetail.clearDb();
+
+        BakingDetailDBHelper helperBakingDetail = BakingDetailDBHelper.getInstance(context);
+        helperBakingDetail.clearDb();
     }
 }

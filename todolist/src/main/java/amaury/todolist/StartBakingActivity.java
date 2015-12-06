@@ -7,6 +7,9 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
+import amaury.todolist.data.Cake;
+import amaury.todolist.db.CakeDBHelper;
+import amaury.todolist.db.CakeDetailDBHelper;
 import amaury.todolist.utils.UiUtils;
 
 /**
@@ -34,6 +37,17 @@ public class StartBakingActivity extends AppCompatActivity {
 
         // Parameter to build the detailed view is the recipe's ID.
         Intent intent = new Intent(getApplicationContext(), BakingDetailActivity.class);
+        startActivity(intent);
+    }
+
+    public void buttonOnGetBusyClick(View view) {
+        View v = (View) view.getParent();
+        TextView textView = (TextView) v.findViewById(R.id.cakeTextView);
+
+        // Parameter to build the detailed view is the cake's ID.
+        Intent intent = new Intent(getApplicationContext(), GetBusyActivity.class);
+        //intent.putExtra(CakeDetailDBHelper.KEY_CAKE_ID, cake.getId());
+        //intent.putExtra(UiUtils.NAME, cake.getName());
         startActivity(intent);
     }
 

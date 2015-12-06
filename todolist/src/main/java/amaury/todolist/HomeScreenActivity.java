@@ -21,6 +21,9 @@ public class HomeScreenActivity extends AppCompatActivity {
         setTitle(UiUtils.TITLE_ACTIVITY_HOME);
 
         if ( DBUtils.DATABASE_RESET )
+            DBUtils.clearDb(getBaseContext());
+
+        if ( DBUtils.DATABASE_INIT )
             DBUtils.initiateDb(getBaseContext());
     }
 

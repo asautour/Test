@@ -166,4 +166,19 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
         else
             return null;
     }
+
+    public void clearDb() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_RECIPE_NAMES,null,null);
+            Log.d("RecipeDBHelper", "Query to delete all from table: " + TABLE_RECIPE_NAMES);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TABLE_RECIPE_NAMES, "Error while trying to delete all ingredients: ");
+        } finally {
+            db.endTransaction();
+        }
+
+    }
 }
